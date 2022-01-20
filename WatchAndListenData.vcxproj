@@ -147,6 +147,7 @@
     <ClInclude Include="mainf\IApp.h" />
     <ClInclude Include="mainf\App_Impl.h" />
     <ClInclude Include="pixelextractor\PixelExtractor.h" />
+    <ClInclude Include="Pixels.h" />
     <ClInclude Include="rawimage\RawToPngConverter_Impl.h" />
     <ClInclude Include="rawimage\RawImage.h" />
     <ClInclude Include="rawimage\IRawImageConverter.h" />
