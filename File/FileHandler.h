@@ -23,6 +23,7 @@ namespace WAL
 		public:
 			FileHandler() = delete;
 			FileHandler(IFile* file, const size_t chunkSize);
+			~FileHandler();
 
 
 			/**
