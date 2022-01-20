@@ -45,18 +45,6 @@
     <ClCompile Include="file\File_Impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="images\BaseImage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="images\JpgImage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="images\PngImage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="images\TifImage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="mainf\AppImplementation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -70,6 +58,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BufferHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Images.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,26 +122,17 @@
     <ClInclude Include="mainf\App_Impl.h">
       <Filter>Header Files\Impl</Filter>
     </ClInclude>
-    <ClInclude Include="images\Jpg_Impl.h">
-      <Filter>Header Files\Impl\Images</Filter>
-    </ClInclude>
-    <ClInclude Include="images\Tif_Impl.h">
-      <Filter>Header Files\Impl\Images</Filter>
-    </ClInclude>
-    <ClInclude Include="images\Png_Impl.h">
-      <Filter>Header Files\Impl\Images</Filter>
-    </ClInclude>
     <ClInclude Include="Encoders\h256_Impl.h">
       <Filter>Header Files\Impl\Encoders</Filter>
     </ClInclude>
     <ClInclude Include="rawimage\RawImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="images\ABaseImage.h">
-      <Filter>Header Files\Impl\Images</Filter>
-    </ClInclude>
     <ClInclude Include="BufferHandler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Images.h">
+      <Filter>Header Files\Impl\Images</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

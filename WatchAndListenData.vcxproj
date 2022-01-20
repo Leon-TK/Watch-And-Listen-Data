@@ -124,10 +124,7 @@
     <ClCompile Include="FileDispencer.cpp" />
     <ClCompile Include="file\FileHandler.cpp" />
     <ClCompile Include="file\File_Impl.cpp" />
-    <ClCompile Include="images\BaseImage.cpp" />
-    <ClCompile Include="images\JpgImage.cpp" />
-    <ClCompile Include="images\PngImage.cpp" />
-    <ClCompile Include="images\TifImage.cpp" />
+    <ClCompile Include="Images.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainf\AppImplementation.cpp" />
   </ItemGroup>
@@ -145,11 +142,8 @@
     <ClInclude Include="file\IFile.h" />
     <ClInclude Include="file\FileHandler.h" />
     <ClInclude Include="file\File_Impl.h" />
-    <ClInclude Include="images\ABaseImage.h" />
+    <ClInclude Include="Images.h" />
     <ClInclude Include="images\IImage.h" />
-    <ClInclude Include="images\Jpg_Impl.h" />
-    <ClInclude Include="images\Png_Impl.h" />
-    <ClInclude Include="images\Tif_Impl.h" />
     <ClInclude Include="mainf\IApp.h" />
     <ClInclude Include="mainf\App_Impl.h" />
     <ClInclude Include="pixelextractor\PixelExtractor.h" />

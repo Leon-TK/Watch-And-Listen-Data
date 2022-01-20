@@ -7,11 +7,18 @@
 
 namespace WAL
 {
-	class IImage
+	namespace Images
 	{
-	public:
-		virtual ~IImage() {};
-		virtual const std::vector<uint8_t>& GetData() const = 0;
-
-	};
+		namespace Interface
+		{
+			class IImage
+			{
+			public:
+				virtual ~IImage() {};
+				virtual const std::vector<uint8_t>& GetData() const = 0;
+			};
+		}
+	}
+	
+	
 }
