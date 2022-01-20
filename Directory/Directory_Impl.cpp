@@ -2,7 +2,7 @@
 #include "Directory_Impl.h"
 #include <string>
 
-namespace WAL
+namespace WAL::Directory
 {
 
     Directory_Impl::Directory_Impl(std::string& path)

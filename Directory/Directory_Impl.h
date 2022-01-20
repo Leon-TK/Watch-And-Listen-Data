@@ -5,23 +5,27 @@
 
 namespace WAL
 {
-	namespace fs = std::filesystem;
-
-	class Directory_Impl final : public IDirectory
+	namespace Directory
 	{
-	private:
-		std::string root;
-	public:
-		Directory_Impl() = delete;
-		Directory_Impl(std::string& path);
+		namespace fs = std::filesystem;
 
-		virtual const std::vector<std::string> Open(std::string& path) override;
+		class Directory_Impl final : public Interface::IDirectory
+		{
+		private:
+			std::string root;
+		public:
+			Directory_Impl() = delete;
+			Directory_Impl(std::string& path);
 
-		/**
-		* returns paths of all files. Dirs are not included
-		*/
-		virtual const std::vector<std::string> GetPaths() const override final;
-		virtual const std::string& GetRoot() const override final;
+			virtual const std::vector<std::string> Open(std::string& path) override;
 
-	};
+			/**
+			* returns paths of all files. Dirs are not included
+			*/
+			virtual const std::vector<std::string> GetPaths() const override final;
+			virtual const std::string& GetRoot() const override final;
+
+		};
+	}
+	
 }
