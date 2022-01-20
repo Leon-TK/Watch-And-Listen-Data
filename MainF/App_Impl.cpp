@@ -76,7 +76,7 @@ namespace WAL::Apps
                 this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<PixelChannelType>(&currentFileChunk, pixelLenghtInBytes);//TODO: delete ptr, TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
                 
                 bool isNextPuttable = true;
-                auto pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist);
+                Pixel pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist); //TODO pixels type
                 rawImage.PutNextPixel(pixel, isNextPuttable);
                 delete this->pixelExtractor;
 
