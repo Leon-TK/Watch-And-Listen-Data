@@ -3,25 +3,24 @@
 #include <vector>
 #include "../ByteAssemble.h"
 #include "../Vectors/Vectors.h"
+#include "../Pixels.h"
 
 /*    
 * Helper for extract pixels from binary buffer. You must to use buffer chunks instead as full one for better perfomance
 */    
 namespace WAL
 {
-	
-
 	namespace Dividers
 	{
 		template <typename>
-		struct SparseChannels;
+		struct SeparatePixels;
 
 		template <typename ChannelType>
 		class IFormDataForAverage
 		{
 		public:
 			virtual ~IFormDataForAverage() {};
-			virtual SparseChannels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) = 0;
+			virtual SeparatePixels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) = 0;
 		};
 
 		template <typename ChannelType>
@@ -30,7 +29,7 @@ namespace WAL
 		public:
 			SerialDivideForAverage() = default;
 
-			virtual SparseChannels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) override final
+			virtual SeparatePixels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) override final
 			{
 				return nullptr;
 			}
@@ -41,9 +40,9 @@ namespace WAL
 		public:
 			AlternatingDivideForAverage() = default;
 
-			virtual SparseChannels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) override final
+			virtual SeparatePixels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) override final
 			{
-				SparseChannels<ChannelType>* channels = new SparseChannels<ChannelType>();
+				SeparatePixels<ChannelType>* channels = new SeparatePixels<ChannelType>();
 				int g = 0;
 				for (int i = 0; i < componentLen; i++)
 				{
@@ -75,7 +74,7 @@ namespace WAL
 		class PixelExtractor final
 		{
 			template <typename ChannelType>
-			struct SparseChannels
+			struct SeparatePixels
 			{
 				PixelVector RedValues;
 				PixelVector GreenValues;
