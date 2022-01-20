@@ -1,3 +1,4 @@
+#pragma once
 #include "BufferHandler.h"
 
 std::vector<uint8_t> WAL::FileBufferHandler::ExtractData(size_t count)

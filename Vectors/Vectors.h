@@ -1,4 +1,5 @@
-﻿/*    
+﻿#pragma once
+/*    
 * template class
 */
 namespace WAL

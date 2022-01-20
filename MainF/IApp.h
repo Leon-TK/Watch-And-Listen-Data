@@ -1,4 +1,5 @@
-﻿/*    
+﻿#pragma once
+/*    
 * Main facade of program
 */    
 namespace WAL

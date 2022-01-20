@@ -1,5 +1,4 @@
 #pragma once
-//#include "PixelExtractor/PixelExtractor.h"
 
 namespace WAL
 {

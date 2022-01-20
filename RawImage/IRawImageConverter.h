@@ -1,5 +1,5 @@
 ﻿#pragma once
-//#include "RawImage.h"
+
 /*    
 * Convert raw image to specified format
 */    

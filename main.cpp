@@ -1,5 +1,4 @@
 #pragma once
-//#include "MainF/IApp.h"
 #include "MainF/App_Impl.h"
 
 int main()
