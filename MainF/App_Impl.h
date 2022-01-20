@@ -9,12 +9,34 @@
 
 namespace WAL
 {
-	class IDirectory;
-	class IVideoEncoder;
-	class FileDispencer;
-	class FileChunkDispencer;
-	template <typename T>
-	class IRawImageConverter;
+	namespace Directory
+	{
+		namespace Interface
+		{
+			class IDirectory;
+		}
+	}
+	namespace Encoders
+	{
+		namespace Interface
+		{
+			class IVideoEncoder;
+		}
+	}
+	namespace File
+	{
+		class FileDispencer;
+		class FileChunkDispencer;
+	}
+	namespace Converter
+	{
+		namespace Interface
+		{
+			template <typename T>
+			class IRawImageConverter;
+		}
+	}
+	
 
 	namespace Vectors
 	{
@@ -29,14 +51,13 @@ namespace WAL
 		class PixelExtractor;
 	};
 
-	namespace AppImplementations
+	namespace Apps
 	{
-
 		typedef uint8_t PixelChannelType;
 		typedef Vectors::TVec3<PixelChannelType> Pixel;
 		typedef Vectors::TVec2<uint32_t> Resolution;
 
-		class AppImplementation final : public IApp
+		class AppImplementation final : public Interface::IApp
 		{
 		private:
 
@@ -95,6 +116,5 @@ namespace WAL
 			virtual void Shutdown() override;
 
 		};
-
 	};
 }

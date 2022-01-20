@@ -14,7 +14,7 @@
 #include "../RawImage/RawToPngConverter_Impl.h"
 #include "../Vectors/Vectors.h"
 
-namespace WAL::AppImplementations
+namespace WAL::Apps
 {
     AppImplementation::~AppImplementation()
     {
