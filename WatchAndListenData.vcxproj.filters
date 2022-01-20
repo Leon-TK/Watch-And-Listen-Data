@@ -45,7 +45,7 @@
     <ClCompile Include="file\File_Impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainf\AppImplementation.cpp">
+    <ClCompile Include="mainf\App_Impl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileChunkDispencer.cpp">

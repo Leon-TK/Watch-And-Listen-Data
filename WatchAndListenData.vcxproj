@@ -126,7 +126,7 @@
     <ClCompile Include="file\File_Impl.cpp" />
     <ClCompile Include="Images.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mainf\AppImplementation.cpp" />
+    <ClCompile Include="mainf\App_Impl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BufferHandler.h" />
