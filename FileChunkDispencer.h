@@ -14,9 +14,11 @@ namespace WAL
 		* File stream that will be handled
 		*/
 		std::ifstream& strm;
+
+		const size_t chunkSize{ 0 };
 	public:
 		FileChunkDispencer() = delete;
-		FileChunkDispencer(std::ifstream& strm);
+		FileChunkDispencer(std::ifstream& strm, const size_t chunkSize);
 
 		/*
 		* Returns bytes chunk of current file.
@@ -24,6 +26,7 @@ namespace WAL
 		* @param outIsComplete returns true if it can extract chunk, false means that in file stream less bytes than you want extract
 		*/
 		std::vector<uint8_t> GetNextChunk(size_t size, bool& outIsComplete); //TODO what type to return?
+		bool canGetNextChunk();
 	};
 
 	class StreamChunkManager

@@ -4,7 +4,7 @@
 
 namespace WAL
 {
-	FileChunkDispencer::FileChunkDispencer(std::ifstream& strm) : strm(strm)
+	FileChunkDispencer::FileChunkDispencer(std::ifstream& strm, const size_t chunkSize) : strm(strm), chunkSize(chunkSize)
 	{
 	}
 
@@ -20,5 +20,9 @@ namespace WAL
 		{
 			return fHandler.GetDataBytes(size, false, outIsComplete);
 		}
+	}
+	bool FileChunkDispencer::canGetNextChunk()
+	{
+		return false;
 	}
 }
