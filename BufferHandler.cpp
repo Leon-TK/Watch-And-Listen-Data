@@ -12,40 +12,48 @@ std::vector<uint8_t> WAL::FileBufferHandler::ExtractData(size_t count)
 	return arr;
 }
 
+std::streampos WAL::FileBufferHandler::TellEofPos()
+{
+	auto beginPos = this->strm->tellg();
+	this->strm->seekg(0, std::ifstream::end);
+	auto endPos = strm->tellg();
+	strm->seekg(beginPos);
+	return endPos;
+}
+
 WAL::FileBufferHandler::FileBufferHandler(std::ifstream* strm): strm(strm)
 {
 
 }
 
-bool WAL::FileBufferHandler::canGetBeforeEnd(size_t count)
+bool WAL::FileBufferHandler::canGetBeforeEnd(size_t count, size_t& outRemaining)
 {
-	if (!strm) return false;
+	if (!strm) { outRemaining = 0; return false; }
 
-	//check if all "get()" will fits in size, i.e. give data within size
 	std::streampos beginPos = strm->tellg();
 	strm->seekg(std::streamoff(count)); //try to reach next position
+	std::streampos offsetPos = strm->tellg();
 	if (strm->eof()) //check if position is end of file
 	{
+		auto eofPos = this->TellEofPos();
+		auto diff = eofPos - beginPos;
+		outRemaining = diff;
 		strm->seekg(beginPos);
 		return false;
 	}
 	else
 	{
 		strm->seekg(beginPos);
+		outRemaining = 0;
 		return true;
 	}
-	//~
+
 }
 
 size_t WAL::FileBufferHandler::GetFileSize()
 {
 	if (!strm) return 0;
-
-    auto beginPos = this->strm->tellg();
-    this->strm->seekg(0, std::ifstream::end);
-    auto endPos = strm->tellg();
-    strm->seekg(beginPos);
-    return endPos;
+    return this->TellEofPos();
 }
 
 std::vector<uint8_t> WAL::FileBufferHandler::GetDataBytes(size_t count, bool doReturnPointer, bool& outIsComplete)

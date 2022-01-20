@@ -10,13 +10,17 @@ namespace WAL
 		std::ifstream* strm;
 
 		std::vector<uint8_t> ExtractData(size_t count);
+
+		std::streampos TellEofPos();
 	public:
 		FileBufferHandler() = delete;
 		FileBufferHandler(std::ifstream* strm);
 		/*
 		* Checks can we get() data from buffer within count before the end
+		* @param count Bytes count to check
+		* @param outRemaining If result is false, this will tell how much bytes remain in stream
 		*/
-		bool canGetBeforeEnd(size_t count);
+		bool canGetBeforeEnd(size_t count, size_t& outRemaining);
 		size_t GetFileSize();
 		/*
 		* Get bytes from buffer
