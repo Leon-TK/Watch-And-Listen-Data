@@ -6,15 +6,15 @@
 namespace WAL
 {
 	class IImage;
-	template<typename pixelType>
-	class RawImageArray;
+	template<typename PixelType>
+	class TRawImage;
 
-	template <typename pixelType>
+	template <typename PixelType>
 	class IRawImageConverter
 	{
 	public:
 		virtual ~IRawImageConverter() {};
-		virtual IImage* Convert(RawImageArray<pixelType>& rawImg) = 0;
+		virtual IImage* Convert(TRawImage<PixelType>& rawImg) = 0;
 
 	};
 }

@@ -7,8 +7,8 @@
 */    
 namespace WAL
 {
-	template<typename RawImagePixelType>
-	class RawToPngConverter_Impl final : public IRawImageConverter<RawImagePixelType>
+	template<typename PixelType>
+	class RawToPngConverter_Impl final : public IRawImageConverter<PixelType>
 	{
 	private:
 		void* realPngConverter{ nullptr };
@@ -16,12 +16,12 @@ namespace WAL
 	public:
 
 		RawToPngConverter_Impl() = default;
-		virtual IImage* Convert(RawImageArray<RawImagePixelType>& rawImg) override;
+		virtual IImage* Convert(TRawImage<PixelType>& rawImg) override final;
 
 	};
 
-	template<typename RawImagePixelType>
-	inline IImage* RawToPngConverter_Impl<RawImagePixelType>::Convert(RawImageArray<RawImagePixelType>& rawImg)
+	template<typename PixelType>
+	inline IImage* RawToPngConverter_Impl<PixelType>::Convert(TRawImage<PixelType>& rawImg)
 	{
 	}
 }

@@ -16,11 +16,14 @@
 
 namespace WAL::AppImplementations
 {
-    WAL::AppImplementations::AppImplementation::~AppImplementation()
+    AppImplementation::~AppImplementation()
     {
         delete this->dir;
         delete this->encoder;
         delete this->pixelExtractor;
+        delete this->chunkDispencer;
+        delete this->rawImageConverter;
+        delete this->fileDispencer;
     }
 
     void AppImplementation::Run()
@@ -52,7 +55,7 @@ namespace WAL::AppImplementations
 
         constexpr size_t fileChunkSize = 2000;
         const Resolution outputRes(1920, 1080);
-        auto pixelLenghtInBytes = (size_t)std::ceil((directoryRes.x * directoryRes.y) / (outputRes.x * outputRes.y));
+        auto pixelLenghtInBytes = (size_t)std::ceil((directoryRes.x * directoryRes.y) / (outputRes.x * outputRes.y)); //TODO ceil or what?
 
         //Raw rawImage
         RawImages::TRawImage<Pixel> rawImage(outputRes.x, outputRes.x); //todo raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
@@ -62,7 +65,7 @@ namespace WAL::AppImplementations
         while (isNextFileExist)
         {
             IFile* file = this->fileDispencer->GetNextFile(isNextFileExist);
-            this->chunkDispencer = new FileChunkDispencer(file->GetBuffer(), fileChunkSize);
+            this->chunkDispencer = new WAL::FileChunkDispencer(file->GetBuffer(), fileChunkSize);
 
             bool isFileChunkFull = true;
             bool isNextPixelExist = true;
@@ -71,8 +74,9 @@ namespace WAL::AppImplementations
                 auto currentFileChunk = this->chunkDispencer->GetNextChunk(fileChunkSize, isFileChunkFull);
                 this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<PixelChannelType>(&currentFileChunk, pixelLenghtInBytes);//TODO: delete ptr, TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
                 
+                bool isNextPuttable = true;
                 auto pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist);
-                rawImage.PutNextPixel(pixel);
+                rawImage.PutNextPixel(pixel, isNextPuttable);
                 delete this->pixelExtractor;
 
                 this->encoder->AddAsFrame(rawImageConverter->Convert(rawImage));// TODO convert raw image to common image;
@@ -131,7 +135,7 @@ namespace WAL::AppImplementations
     void AppImplementation::InitDirectory()
     {
         std::string path = "C:\\Users\\leon2\\Desktop\\Garbage";
-        this->dir = new Directory_Impl(path);
+        this->dir = new WAL::Directory_Impl(path);
     }
 
     Resolution AppImplementation::GetDirectoryResolution()
@@ -145,7 +149,7 @@ namespace WAL::AppImplementations
 
     void AppImplementation::InitFileDispencer()
     {
-        this->fileDispencer = new FileDispencer(this->dir->GetPaths());
+        this->fileDispencer = new WAL::FileDispencer(this->dir->GetPaths());
     }
 
     void AppImplementation::InitChunkDispencer()
@@ -155,11 +159,11 @@ namespace WAL::AppImplementations
 
     void AppImplementation::InitEncoder()
     {
-        this->encoder = new h256Encoder();
+        this->encoder = new WAL::h256Encoder();
     }
 
     void AppImplementation::InitRawImageConverter()
     {
-        this->rawImageConverter = new RawToPngConverter_Impl<PixelChannelType>();
+        this->rawImageConverter = new WAL::RawToPngConverter_Impl<PixelChannelType>();
     }
 }

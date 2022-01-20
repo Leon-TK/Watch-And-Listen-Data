@@ -12,7 +12,7 @@ namespace WAL
 	namespace AppImplementations
 	{
 		//Forward decl
-		class WAL::IDirectory;
+		class IDirectory;
 		class WAL::IVideoEncoder;
 		template <typename T>
 		class WAL::PixelExtractors::PixelExtractor;
@@ -39,7 +39,7 @@ namespace WAL
 			WAL::PixelExtractors::PixelExtractor<PixelChannelType>* pixelExtractor{ nullptr };
 			WAL::FileDispencer* fileDispencer{ nullptr };
 			WAL::FileChunkDispencer* chunkDispencer{ nullptr };
-			WAL::IRawImageConverter<uint16_t>* rawImageConverter{ nullptr };
+			WAL::IRawImageConverter<PixelChannelType>* rawImageConverter{ nullptr };
 
 			/**
 			* Checks if next pixel exist
