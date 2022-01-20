@@ -10,6 +10,14 @@
 */    
 namespace WAL
 {
+	namespace Pixels
+	{
+		template <typename ChannelType>
+		class Pixel final
+		{
+
+		};
+	}
 	/*template <typename T>
 	class Vec3;
 	template <typename T>
@@ -26,18 +34,12 @@ namespace WAL
 		typedef Vec2<uint16_t> Resolution;
 		typedef std::vector<uint8_t> ByteVector;
 		typedef std::vector<Pixel> PixelVector;
-	private:
-		size_t currentPosition{0};
+
 		const size_t sizeToExtract{ 0 };
-		/**
-		* How much rows were not be getted by y step ignore. Used for next buffer y step correction
-		*/
-		size_t remainingRows{ 0 };
 
 		/**
 		* You can change buffer to new chunk by setbuffer()
 		*/
-		//std::ifstream* buffer;
 		ByteVector* buffer;
 
 		/**
@@ -47,12 +49,6 @@ namespace WAL
 		*/
 		PixelVector GetRow(size_t step, size_t maxLen);
 
-		/**
-		* How far do step for extrating pixels
-		* @param dirRes
-		* @param outRes
-		*/
-		size_t GetByteStep(Resolution& dirRes, Resolution& outRes);
 
 		/**
 		* returns true if rows with given length can fit to buffer without empty bytes at the end
@@ -63,7 +59,7 @@ namespace WAL
 
 		ByteVector GetPixelBytes();
 
-		constexpr int GetComponentCount();
+		constexpr int GetPixelComponentCount();
 
 		size_t GetComponentBytesLen();
 
@@ -115,11 +111,6 @@ namespace WAL
 	}
 
 	template <typename PixelType>
-	inline size_t PixelExtractor<PixelType>::GetByteStep(Resolution& dirRes, Resolution& outRes)
-	{
-	}
-
-	template <typename PixelType>
 	inline bool PixelExtractor<PixelType>::canRowsFitToBuffer(size_t rowLen, size_t bufLen)
 	{
 		return (bufLen % rowLen) == 0;
@@ -133,7 +124,7 @@ namespace WAL
 	}
 
 	template<typename PixelType>
-	inline constexpr int PixelExtractor<PixelType>::GetComponentCount()
+	inline constexpr int PixelExtractor<PixelType>::GetPixelComponentCount()
 	{
 		return 3;
 	}
@@ -141,7 +132,7 @@ namespace WAL
 	template<typename PixelType>
 	inline size_t PixelExtractor<PixelType>::GetComponentBytesLen()
 	{
-		return (size_t)std::floor(this->sizeToExtract / this->GetComponentCount());
+		return (size_t)std::floor(this->sizeToExtract / this->GetPixelComponentCount());
 	}
 
 	template<typename PixelType>
@@ -224,7 +215,7 @@ namespace WAL
 			RedPixels.at(i) = pixelBytes.at(g);
 			GreenPixels.at(i) = pixelBytes.at(g + 1);
 			BluePixels.at(i) = pixelBytes.at(g + 2);
-			g += GetComponentCount();
+			g += GetPixelComponentCount();
 		}
 
 		//PixelVector RedPixels(componentLen); //TODO have to be PixelVector
