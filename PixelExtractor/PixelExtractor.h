@@ -115,9 +115,9 @@ namespace WAL
 
 			constexpr int GetPixelComponentCount();
 
-			size_t GetComponentBytesLen();
+			size_t GetChannelBytesLen();
 
-			PixelVector ConvertComponentBytesToPixels();
+			PixelVector ConvertChannelsBytesToPixels();
 
 			bool canPixelTypesFitBuffer();
 
@@ -171,13 +171,13 @@ namespace WAL
 		}
 
 		template<typename ChannelType>
-		inline size_t PixelExtractor<ChannelType>::GetComponentBytesLen()
+		inline size_t PixelExtractor<ChannelType>::GetChannelBytesLen()
 		{
 			return (size_t)std::floor(this->pixelSizeInBytes / this->GetPixelComponentCount());
 		}
 
 		template<typename ChannelType>
-		inline PixelVector PixelExtractor<ChannelType>::ConvertComponentBytesToPixels()
+		inline PixelVector PixelExtractor<ChannelType>::ConvertChannelsBytesToPixels()
 		{
 			if (canPixelTypesFitBuffer())
 			{
@@ -233,27 +233,33 @@ namespace WAL
 				outIsNextPixelExist = false;
 				return Pixel(); //TODO through exception
 			}
+			if (canGetNextPixel())
+			{
+				auto pixelBytes = GetPixelBytes();
+				auto channelLen = GetChannelBytesLen();
+				PixelVector pixels = ConvertChannelsBytesToPixels();
 
-			auto pixelBytes = GetPixelBytes();
+				PixelVector RedPixels(channelLen);
+				PixelVector GreenPixels(channelLen);
+				PixelVector BluePixels(channelLen);
 
-			auto componentLen = GetComponentBytesLen();
+				Dividers::IFormDataForAverage<ChannelType>* getForAverage = Dividers::AlternatingDivideForAverage<ChannelType>();
+				SparseChannels* channels = getForAverage->Run(pixels);
 
-			PixelVector pixelBytes = ConvertComponentBytesToPixels();
-
-			PixelVector RedPixels(componentLen);
-			PixelVector GreenPixels(componentLen);
-			PixelVector BluePixels(componentLen);
-
-			Dividers::IFormDataForAverage<ChannelType>* getForAverage = Dividers::AlternatingDivideForAverage<ChannelType>();
-			SparseChannels* channels = getForAverage->Run(pixelBytes);
-
-			//get average in each chunk
-			ChannelType R = ByteAssemble::GetAverageFrom<ChannelType>(*channels.RedValues, componentLen);
-			ChannelType G = ByteAssemble::GetAverageFrom<ChannelType>(*channels.GreenValues, componentLen);
-			ChannelType B = ByteAssemble::GetAverageFrom<ChannelType>(*channels.BlueValues, componentLen);
-			//save average to 3 component of pixel
-			//set new current position 
-			return Pixel(R, G, B);
+				//get average in each chunk
+				ChannelType R = ByteAssemble::GetAverageFrom<ChannelType>(*channels.RedValues, componentLen);
+				ChannelType G = ByteAssemble::GetAverageFrom<ChannelType>(*channels.GreenValues, componentLen);
+				ChannelType B = ByteAssemble::GetAverageFrom<ChannelType>(*channels.BlueValues, componentLen);
+				//save average to 3 component of pixel
+				this->handledPixelBytes += this->pixelSizeInBytes;
+				outIsNextPixelExist = canGetNextPixel();
+				return Pixel(R, G, B);
+			}
+			else
+			{
+				outIsNextPixelExist = false;
+			}
+		
 		}
 		template<typename ChannelType>
 		inline bool PixelExtractor<ChannelType>::canGetNextPixel()
