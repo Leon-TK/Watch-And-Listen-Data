@@ -14,9 +14,9 @@
 #include "../RawImage/RawToPngConverter_Impl.h"
 #include "../Vectors/Vectors.h"
 
-namespace WAL
+namespace WAL::AppImplementations
 {
-    AppImplementation::~AppImplementation()
+    WAL::AppImplementations::AppImplementation::~AppImplementation()
     {
         delete this->dir;
         delete this->encoder;
@@ -52,26 +52,26 @@ namespace WAL
 
         constexpr size_t fileChunkSize = 2000;
         const Resolution outputRes(1920, 1080);
-        auto pixelLenghtInBytes = (size_t)std::ceil((directoryRes.X * directoryRes.Y) / (outputRes.X * outputRes.Y));
+        auto pixelLenghtInBytes = (size_t)std::ceil((directoryRes.x * directoryRes.y) / (outputRes.x * outputRes.y));
 
         //Raw rawImage
-        RawImageArray<PixelType> rawImage(outputRes); //todo raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
+        RawImages::TRawImage<Pixel> rawImage(outputRes.x, outputRes.x); //todo raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
         
 
         bool isNextFileExist = true;
         while (isNextFileExist)
         {
             IFile* file = this->fileDispencer->GetNextFile(isNextFileExist);
-            this->chunkDispencer = new FileChunkDispencer(file->GetBuffer());
+            this->chunkDispencer = new FileChunkDispencer(file->GetBuffer(), fileChunkSize);
 
             bool isFileChunkFull = true;
             bool isNextPixelExist = true;
             while (isFileChunkFull && isNextPixelExist)
             {
                 auto currentFileChunk = this->chunkDispencer->GetNextChunk(fileChunkSize, isFileChunkFull);
-                this->pixelExtractor = new PixelExtractor<PixelType>(&currentFileChunk, pixelLenghtInBytes);//TODO: delete ptr, TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
+                this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<PixelChannelType>(&currentFileChunk, pixelLenghtInBytes);//TODO: delete ptr, TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
                 
-                Pixel pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist);
+                auto pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist);
                 rawImage.PutNextPixel(pixel);
                 delete this->pixelExtractor;
 
@@ -134,7 +134,7 @@ namespace WAL
         this->dir = new Directory_Impl(path);
     }
 
-    Vec2<uint16_t> AppImplementation::GetDirectoryResolution()
+    Resolution AppImplementation::GetDirectoryResolution()
     {
         //Directory handler
         DirectoryHandler dirHandle(this->dir);
@@ -160,6 +160,6 @@ namespace WAL
 
     void AppImplementation::InitRawImageConverter()
     {
-        this->rawImageConverter = new RawToPngConverter_Impl<PixelType>();
+        this->rawImageConverter = new RawToPngConverter_Impl<PixelChannelType>();
     }
 }
