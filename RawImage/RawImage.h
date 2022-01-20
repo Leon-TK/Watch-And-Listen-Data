@@ -11,7 +11,7 @@ namespace WAL
 	{
 		/**
 		* Represents array of Pixel classes
-		* @param PixelChannelType which type of Pixel to use
+		* @param PixelType which type of Pixel to use. See Pixels.h
 		*
 		*/
 		template <typename PixelType>
