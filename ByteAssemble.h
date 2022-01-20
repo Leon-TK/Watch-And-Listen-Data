@@ -13,11 +13,11 @@ namespace WAL
 		* You can cast result to lower types like short or char
 		* @param bytes Array of binary data
 		*/
-		template <int Count>
-		unsigned long GlueBytes(std::array<char, Count>& bytes)
+		template <typename ChannelType>
+		ChannelType GlueBytesToChannel(std::array<uint8_t, sizeof(ChannelType)>& bytes)
 		{
-			unsigned long result = 0;
-			for (unsigned int i = 0; i < Count; i++)
+			ChannelType result = 0;
+			for (unsigned int i = 0; i < sizeof(ChannelType); i++)
 			{
 				result = bytes[i];
 				result <<= 8;
@@ -56,12 +56,6 @@ namespace WAL
 			}
 
 			return (T)std::ceil(sum / size);
-		}
-
-		template <typename T, int X, int Y>
-		std::array<T, (X* Y)> SetupImageArray()
-		{
-			return std::array<T, (X* Y)>();
 		}
 	}
 	
