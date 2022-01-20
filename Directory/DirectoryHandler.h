@@ -16,17 +16,20 @@ namespace WAL
 
 	namespace Directory
 	{
-		//Forwarding
-		class IDirectory;
+		namespace Interface
+		{
+			//Forwarding
+			class IDirectory;
+		}
 
 		class DirectoryHandler final
 		{
 		private:
-			IDirectory* dir{ nullptr };
+			Interface::IDirectory* dir{ nullptr };
 
 		public:
 			DirectoryHandler() = delete;
-			DirectoryHandler(IDirectory* dir);
+			DirectoryHandler(Interface::IDirectory* dir);
 			~DirectoryHandler();
 
 			/**

@@ -8,7 +8,7 @@
 
 namespace WAL::Directory
 {
-    DirectoryHandler::DirectoryHandler(IDirectory* dir) : dir(dir)
+    DirectoryHandler::DirectoryHandler(Interface::IDirectory* dir) : dir(dir)
     {
     }
 
