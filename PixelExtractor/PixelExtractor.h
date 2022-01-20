@@ -9,7 +9,7 @@
 * Helper for extract pixels from binary buffer. You must to use buffer chunks instead as full one for better perfomance
 */    
 namespace WAL
-{
+{ //Hello
 	namespace Dividers
 	{
 		template <typename>
