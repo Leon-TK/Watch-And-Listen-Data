@@ -84,13 +84,22 @@ namespace WAL
 		class PixelExtractor final
 		{
 			typedef std::vector<PixelType> PixelVector;
+
+			/*
+			* How much one pixel takes byte lenght
+			*/
 			const size_t pixelSizeInBytes{ 0 };
+
+			/*
+			* How many bytes were sended by GetNextPixel(). Commonly for checking next pixel exist
+			*/
 			size_t handledPixelBytes{ 0 };
 
 			/**
+			* It is buffer from where pixel extractor will be extract pixels
 			* You can change buffer to new chunk by setbuffer()
 			*/
-			ByteVector* buffer;
+			ByteVector* fileBufferChunk;
 
 			/**
 			* Returns row of pixels with lenght as output resolution.X. Ignores some rows be Y step
@@ -114,24 +123,41 @@ namespace WAL
 			*/
 			PixelVector ExtractRow(size_t step, size_t maxLen);
 
+			/*
+			* Returns bytes of size of one pixel. TODO create can get pixel bytes
+			*/
 			ByteVector GetPixelBytes();
 
-			constexpr int GetPixelComponentCount();
+			/*
+			* Returns channels count of pixel type //TODO should move to pixel type definition? (Pixels.h)
+			*/
+			constexpr int GetPixelChannelsCount();
 
+			/*
+			* How much bytes takes one channel in pixel
+			*/
 			size_t GetChannelBytesLen();
 
-			PixelVector ConvertChannelsBytesToPixels();
+			PixelVector ConvertFileBufferChunkToPixelVector();
 
+			/*
+			* True if pixel types fit file buffer chunk, i.e. no more no less
+			*/
 			bool canPixelTypesFitBuffer();
 
 		public:
 			PixelExtractor() = delete;
-			PixelExtractor(ByteVector* buffer, const size_t pixelSizeInBytes);
+			/*
+			* @param buffer Buffer to extract from
+			* @param pixelSizeInBytes How much one pixel takes bytes
+			*/
+			PixelExtractor(ByteVector* fileBufferChunk, const size_t pixelSizeInBytes);
 
-			void SetNewBuffer(ByteVector* buffer);
+			void SetNewBuffer(ByteVector* fileBufferChunk);
 
 			/*
 			* Returns pixel while end of buffer is not reached
+			* @param outIsNextPixelExist Returns true if next function call will give valid pixel
 			*/
 			PixelType GetNextPixel(bool& outIsNextPixelExist);
 
@@ -140,7 +166,7 @@ namespace WAL
 		};
 
 		template<typename PixelType>
-		inline PixelExtractor<PixelType>::PixelExtractor(ByteVector* buffer, const size_t pixelSizeInBytes) : buffer(buffer)
+		inline PixelExtractor<PixelType>::PixelExtractor(ByteVector* fileBufferChunk, const size_t pixelSizeInBytes) : fileBufferChunk(fileBufferChunk)
 		{
 		}
 
@@ -167,7 +193,7 @@ namespace WAL
 			ByteVector vec(pixelSizeInBytes);
 			for (int i = 0; i < pixelSizeInBytes; i++)
 			{
-				vec.at(i) = buffer->at(i);
+				vec.at(i) = fileBufferChunk->at(i);
 			}
 
 			return vec;
@@ -176,7 +202,7 @@ namespace WAL
 		}
 
 		template<typename PixelType>
-		inline constexpr int PixelExtractor<PixelType>::GetPixelComponentCount()
+		inline constexpr int PixelExtractor<PixelType>::GetPixelChannelsCount()
 		{
 			return 3;
 		}
@@ -184,16 +210,16 @@ namespace WAL
 		template<typename PixelType>
 		inline size_t PixelExtractor<PixelType>::GetChannelBytesLen()
 		{
-			return (size_t)std::floor(this->pixelSizeInBytes / this->GetPixelComponentCount());
+			return (size_t)std::floor(this->pixelSizeInBytes / this->GetPixelChannelsCount());
 		}
 
 		template<typename PixelType>
-		inline std::vector<PixelType> PixelExtractor<PixelType>::ConvertChannelsBytesToPixels()
+		inline std::vector<PixelType> PixelExtractor<PixelType>::ConvertFileBufferChunkToPixelVector()
 		{
 			if (canPixelTypesFitBuffer())
 			{
 				PixelVector pixels;
-				const auto pixelCount = buffer->size() / sizeof(PixelType);
+				const auto pixelCount = fileBufferChunk->size() / sizeof(PixelType);
 
 				//convert group of bytes to pixels
 				for (int i = 0; i < pixelCount; i++)
@@ -202,7 +228,7 @@ namespace WAL
 					int g = 0;
 					for (int j = 0; j < sizeof(PixelType); j++)
 					{
-						RawPixel[j] = buffer->at(g + j);
+						RawPixel[j] = fileBufferChunk->at(g + j);
 						g += sizeof(PixelType);
 					}
 					auto pixel = ByteAssemble::GlueBytesToChannel<PixelType>(RawPixel);
@@ -221,19 +247,19 @@ namespace WAL
 		template<typename PixelType>
 		inline bool PixelExtractor<PixelType>::canPixelTypesFitBuffer()
 		{
-			return (buffer->size() % sizeof(PixelType)) == 0;
+			return (fileBufferChunk->size() % sizeof(PixelType)) == 0;
 		}
 
 		template<typename PixelType>
-		inline void PixelExtractor<PixelType>::SetNewBuffer(ByteVector* buffer)
+		inline void PixelExtractor<PixelType>::SetNewBuffer(ByteVector* fileBufferChunk)
 		{
-			this->buffer = buffer;
+			this->fileBufferChunk = fileBufferChunk;
 		}
 
 		template<typename PixelType>
 		inline PixelType PixelExtractor<PixelType>::GetNextPixel(bool& outIsNextPixelExist)
 		{
-			if (!this->buffer)
+			if (!this->fileBufferChunk)
 			{
 				outIsNextPixelExist = false;
 				return PixelType();
@@ -249,7 +275,7 @@ namespace WAL
 			{
 				auto pixelBytes = GetPixelBytes();
 				auto channelLen = GetChannelBytesLen();
-				PixelVector pixels = ConvertChannelsBytesToPixels();
+				PixelVector pixels = ConvertFileBufferChunkToPixelVector();
 
 				PixelVector RedPixels(channelLen);
 				PixelVector GreenPixels(channelLen);
@@ -276,7 +302,7 @@ namespace WAL
 		template<typename PixelType>
 		inline bool PixelExtractor<PixelType>::canGetNextPixel()
 		{
-			return !((handledPixelBytes + pixelSizeInBytes) > buffer->size());
+			return !((handledPixelBytes + pixelSizeInBytes) > fileBufferChunk->size());
 		}
 	}
 }
