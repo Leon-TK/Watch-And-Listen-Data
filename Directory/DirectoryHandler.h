@@ -8,35 +8,39 @@
 
 namespace WAL
 {
-	//Forwarding
-	class IDirectory;
-
 	namespace Vectors
 	{
 		template<typename>
 		class TVec2;
 	}
-	
-	class DirectoryHandler final
+
+	namespace Directory
 	{
-	private:
-		IDirectory* dir{ nullptr };
+		//Forwarding
+		class IDirectory;
 
-	public:
-		DirectoryHandler() = delete;
-		DirectoryHandler(IDirectory* dir);
-		~DirectoryHandler();
+		class DirectoryHandler final
+		{
+		private:
+			IDirectory* dir{ nullptr };
 
-		/**
-		* Gets size of all files in that directory. Uses File class
-		*/
-		size_t GetAllFilesSize() const;
+		public:
+			DirectoryHandler() = delete;
+			DirectoryHandler(IDirectory* dir);
+			~DirectoryHandler();
 
-		/**
-		* Calculates directory "resolution" for further calcultaions
-		* @param aspectRatio
-		*/
-		Vectors::TVec2<uint16_t> GetResolution(float aspectRatio) const;
+			/**
+			* Gets size of all files in that directory. Uses File class
+			*/
+			size_t GetAllFilesSize() const;
 
-	};
+			/**
+			* Calculates directory "resolution" for further calcultaions
+			* @param aspectRatio
+			*/
+			Vectors::TVec2<uint16_t> GetResolution(float aspectRatio) const;
+
+		};
+	}
+	
 }

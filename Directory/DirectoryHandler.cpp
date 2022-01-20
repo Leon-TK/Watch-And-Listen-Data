@@ -6,7 +6,7 @@
 #include <cmath>
 #include "../Vectors/Vectors.h"
 
-namespace WAL
+namespace WAL::Directory
 {
     DirectoryHandler::DirectoryHandler(IDirectory* dir) : dir(dir)
     {
@@ -27,7 +27,7 @@ namespace WAL
 
         for (size_t i = 0; i < paths.size(); i++)
         {
-            IFile* file = new File_Impl(paths.at(i));
+            WAL::File::Interface::IFile* file = new WAL::File::File_Impl(paths.at(i));
             totalSize += file->GetFileSize();
         }
 
