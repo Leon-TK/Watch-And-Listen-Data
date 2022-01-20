@@ -10,7 +10,7 @@ namespace WAL
 	namespace Converter
 	{
 		template<typename PixelType>
-		class RawToPngConverter_Impl final : public IRawImageConverter<PixelType>
+		class RawToPngConverter_Impl final : public Interface::IRawImageConverter<PixelType>
 		{
 		private:
 			void* realPngConverter{ nullptr };
