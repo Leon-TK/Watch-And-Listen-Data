@@ -6,7 +6,7 @@ namespace WAL::File
 {
 	FileChunkDispencer::FileChunkDispencer(std::ifstream& strm, const size_t chunkSize) : strm(strm), chunkSize(chunkSize)
 	{
-		fileBufferHandler = new FileBufferHandler(&this->strm);
+		fileBufferHandler = new BufferHandlers::FileBufferHandler(&this->strm);
 	}
 
 	FileChunkDispencer::~FileChunkDispencer()

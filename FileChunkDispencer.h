@@ -4,13 +4,17 @@
 
 namespace WAL
 {
+	namespace BufferHandlers
+	{
+		class FileBufferHandler;
+	}
+
 	namespace File
 	{
 		/*
 	* Class that responsible for giving chunks of file.
 	*/
-		class FileBufferHandler;
-
+		
 		class FileChunkDispencer final
 		{
 		private:
@@ -21,7 +25,7 @@ namespace WAL
 
 			const size_t chunkSize{ 0 };
 			size_t handledBytes{ 0 };
-			FileBufferHandler* fileBufferHandler;
+			BufferHandlers::FileBufferHandler* fileBufferHandler;
 		public:
 			FileChunkDispencer() = delete;
 			FileChunkDispencer(std::ifstream& strm, const size_t chunkSize);
