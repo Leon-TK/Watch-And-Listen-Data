@@ -1,16 +1,17 @@
 #pragma once
+#include "Vectors/Vectors.h"
 
 namespace Pixels
 {
 	template <typename ChannelType>
 	class TRgbPixel final
 	{
-		Vectors::TVec3<ChannelType> channels;
+		WAL::Vectors::TVec3<ChannelType> channels;
 	};
 	template <typename ChannelType>
 	class TRgbaPixel final
 	{
-		Vectors::TVec3<ChannelType> channels;
+		WAL::Vectors::TVec3<ChannelType> channels;
 		ChannelType alpha;
 	};
 	template <typename ChannelType>
@@ -21,12 +22,12 @@ namespace Pixels
 
 	class RgbPixel final
 	{
-		Vectors::TVec3<uint8_t> channels;
+		WAL::Vectors::TVec3<uint8_t> channels;
 	};
 
 	class RgbaPixel final
 	{
-		Vectors::TVec3<uint8_t> channels;
+		WAL::Vectors::TVec3<uint8_t> channels;
 		uint8_t alpha;
 	};
 
