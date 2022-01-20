@@ -10,19 +10,27 @@
 */    
 namespace WAL
 { //Hello
+	namespace PixelExtractors
+	{
+		template <typename ChannelType>
+		struct SeparateChannels
+		{
+			std::vector<ChannelType> RedValues;
+			std::vector<ChannelType> GreenValues;
+			std::vector<ChannelType> BlueValues;
+		};
+	}
+
 	namespace Dividers
 	{
 		typedef std::vector<uint8_t> ByteVector;
-
-		template <typename>
-		struct SeparatePixels;
 
 		template <typename ChannelType>
 		class IFormDataForAverage
 		{
 		public:
 			virtual ~IFormDataForAverage() {};
-			virtual SeparatePixels<ChannelType>* Run() = 0;
+			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() = 0;
 		};
 
 		template <typename ChannelType>
@@ -31,7 +39,7 @@ namespace WAL
 		public:
 			SerialDivideForAverage() = default;
 
-			virtual SeparatePixels<ChannelType>* Run() override final
+			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() override final
 			{
 				return nullptr;
 			}
@@ -48,9 +56,9 @@ namespace WAL
 			AlternatingDivideForAverage(const ByteVector& pixelBytes, const size_t componentLen, const size_t componentCount)
 		    :componentCount(componentCount), pixelBytes(pixelBytes), componentLen(componentLen) {};
 
-			virtual SeparatePixels<ChannelType>* Run() override final
+			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() override final
 			{
-				SeparatePixels<ChannelType>* channels = new SeparatePixels<ChannelType>();
+				PixelExtractors::SeparateChannels<ChannelType>* channels = new PixelExtractors::SeparateChannels<ChannelType>();
 				int g = 0;
 				for (int i = 0; i < this->componentLen; i++)
 				{
@@ -77,13 +85,6 @@ namespace WAL
 		template <typename ChannelType>
 		class PixelExtractor final
 		{
-			template <typename ChannelType>
-			struct SeparatePixels
-			{
-				PixelVector RedValues;
-				PixelVector GreenValues;
-				PixelVector BlueValues;
-			};
 
 			const size_t pixelSizeInBytes{ 0 };
 			size_t handledPixelBytes{ 0 };
@@ -247,13 +248,13 @@ namespace WAL
 				PixelVector GreenPixels(channelLen);
 				PixelVector BluePixels(channelLen);
 
-				Dividers::IFormDataForAverage<ChannelType>* getForAverage = Dividers::AlternatingDivideForAverage<ChannelType>(pixelBytes, channelLen, 3);
-				SparseChannels* channels = getForAverage->Run();
+				Dividers::IFormDataForAverage<ChannelType>* getForAverage = Dividers::AlternatingDivideForAverage<ChannelType>(pixelBytes, channelLen, 3); //TODO delete
+				SeparateChannels* channels = getForAverage->Run(); //TODO delete
 
 				//get average in each chunk
-				ChannelType R = ByteAssemble::GetAverageFrom<ChannelType>(*channels.RedValues, componentLen);
-				ChannelType G = ByteAssemble::GetAverageFrom<ChannelType>(*channels.GreenValues, componentLen);
-				ChannelType B = ByteAssemble::GetAverageFrom<ChannelType>(*channels.BlueValues, componentLen);
+				ChannelType R = ByteAssemble::GetAverageFrom<ChannelType>(*channels.RedValues, channelLen);
+				ChannelType G = ByteAssemble::GetAverageFrom<ChannelType>(*channels.GreenValues, channelLen);
+				ChannelType B = ByteAssemble::GetAverageFrom<ChannelType>(*channels.BlueValues, channelLen);
 				//save average to 3 component of pixel
 				this->handledPixelBytes += this->pixelSizeInBytes;
 				outIsNextPixelExist = canGetNextPixel();
@@ -268,7 +269,7 @@ namespace WAL
 		template<typename ChannelType>
 		inline bool PixelExtractor<ChannelType>::canGetNextPixel()
 		{
-			return !((handledPixelBytes + pixelSizeInBytes) > buffer->size())
+			return !((handledPixelBytes + pixelSizeInBytes) > buffer->size());
 		}
 	}
 }
