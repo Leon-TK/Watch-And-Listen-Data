@@ -5,8 +5,6 @@
 #include "../Directory/DirectoryHandler.h"
 #include "../Encoders/IVideoEncoder.h"
 #include "../Encoders/h256_Impl.h"
-#include "../Vectors/Vec2.h"
-#include "../Vectors/Vec3.h"
 #include "../PixelExtractor/PixelExtractor.h"
 #include "../FileDispencer.h"
 #include "../FileChunkDispencer.h"
@@ -14,6 +12,7 @@
 #include "../RawImage/RawImage.h"
 #include "../RawImage/IRawImageConverter.h"
 #include "../RawImage/RawToPngConverter_Impl.h"
+#include "../Vectors/Vectors.h"
 
 namespace WAL
 {

@@ -1,10 +1,7 @@
 ﻿#pragma once
 #include "IApp.h"
-//#include "../PixelExtractor/PixelExtractor.h"
 #include <fstream>
 #include <string>
-//#include "../Vectors/Vec2.h"
-//#include "../Vectors/Vec3.h"
 
 /*    
 * Test implementaion
@@ -22,18 +19,19 @@ namespace WAL
 	class FileChunkDispencer;
 	template <typename T>
 	class IRawImageConverter;
-	/*template <typename T>
-	class Vec3;
+
 	template <typename T>
-	class Vec2;*/
+	class TVec3;
+	template <typename T>
+	class TVec2;
 
 	
 	class AppImplementation final : public IApp
 	{
 	private:
 		typedef uint8_t PixelType;
-		typedef Vec3<PixelType> Pixel;
-		typedef Vec2<uint16_t> Resolution;
+		typedef TVec3<PixelType> Pixel;
+		typedef TVec2<uint16_t> Resolution;
 
 		IDirectory* dir{nullptr};
 		IVideoEncoder* encoder{ nullptr };
