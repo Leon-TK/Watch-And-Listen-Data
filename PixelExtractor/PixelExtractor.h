@@ -163,8 +163,16 @@ namespace WAL
 		template<typename PixelType>
 		inline std::vector<uint8_t> PixelExtractor<PixelType>::GetPixelBytes()
 		{
+			//TEMPLATE
+			ByteVector vec(pixelSizeInBytes);
+			for (int i = 0; i < pixelSizeInBytes; i++)
+			{
+				vec.at(i) = buffer->at(i);
+			}
+
+			return vec;
 			//get n bytes from array. how much to take calculates by dirRes / outputRes 
-			return ByteAssemble::DEPRECATED_GetBytesFrom<this->pixelSizeInBytes>(this->buffer); //TODO chanke from template to common func
+			//return ByteAssemble::DEPRECATED_GetBytesFrom<this->pixelSizeInBytes>(this->buffer); //TODO chanke from template to common func
 		}
 
 		template<typename PixelType>
@@ -236,6 +244,7 @@ namespace WAL
 				outIsNextPixelExist = false;
 				return PixelType(); //TODO through exception
 			}
+
 			if (canGetNextPixel())
 			{
 				auto pixelBytes = GetPixelBytes();
