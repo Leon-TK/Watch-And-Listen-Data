@@ -5,16 +5,33 @@
 */    
 namespace WAL
 {
-	class IImage;
-	template<typename PixelType>
-	class TRawImage;
-
-	template <typename PixelType>
-	class IRawImageConverter
+	namespace Images
 	{
-	public:
-		virtual ~IRawImageConverter() {};
-		virtual IImage* Convert(TRawImage<PixelType>& rawImg) = 0;
+		namespace Interface
+		{
+			class IImage;
+		}
+	}
+	namespace RawImages
+	{
+		template<typename PixelType>
+		class TRawImage;
+	}
 
-	};
+	namespace Converter
+	{
+		namespace Interface
+		{
+			template <typename PixelType>
+			class IRawImageConverter
+			{
+			public:
+				virtual ~IRawImageConverter() {};
+				virtual WAL::Images::Interface::IImage* Convert(WAL::RawImages::TRawImage<PixelType>& rawImg) = 0;
+
+			};
+		}
+		
+	}
+	
 }
