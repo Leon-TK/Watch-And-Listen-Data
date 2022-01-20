@@ -10,9 +10,13 @@ namespace WAL
 {
 	//Forwarding
 	class IDirectory;
-	template<typename>
-	class TVec2;
 
+	namespace Vectors
+	{
+		template<typename>
+		class TVec2;
+	}
+	
 	class DirectoryHandler final
 	{
 	private:
@@ -32,7 +36,7 @@ namespace WAL
 		* Calculates directory "resolution" for further calcultaions
 		* @param aspectRatio
 		*/
-		TVec2<uint16_t> GetResolution(float aspectRatio) const;
+		Vectors::TVec2<uint16_t> GetResolution(float aspectRatio) const;
 
 	};
 }

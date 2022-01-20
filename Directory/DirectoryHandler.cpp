@@ -34,7 +34,7 @@ namespace WAL
         return totalSize;
     }
 
-    TVec2<uint16_t> DirectoryHandler::GetResolution(float aspectRatio) const
+    Vectors::TVec2<uint16_t> DirectoryHandler::GetResolution(float aspectRatio) const
     {
         size_t dirSize = this->GetAllFilesSize();
         float x;
@@ -44,7 +44,7 @@ namespace WAL
         x = aspectRatio * y;
 
         //TODO ceil or floor x and y for not missing data
-        TVec2<uint16_t> res((uint16_t)x, (uint16_t)y);
+        Vectors::TVec2<uint16_t> res((uint16_t)x, (uint16_t)y);
 
         return res;
     }
