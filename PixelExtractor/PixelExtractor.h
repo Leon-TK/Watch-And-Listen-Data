@@ -82,6 +82,7 @@ namespace WAL
 			};
 
 			const size_t pixelSizeInBytes{ 0 };
+			size_t handledPixelBytes{ 0 };
 
 			/**
 			* You can change buffer to new chunk by setbuffer()
@@ -257,7 +258,7 @@ namespace WAL
 		template<typename ChannelType>
 		inline bool PixelExtractor<ChannelType>::canGetNextPixel()
 		{
-			return false;
+			return !((handledPixelBytes + pixelSizeInBytes) > buffer->size())
 		}
 	}
 }
