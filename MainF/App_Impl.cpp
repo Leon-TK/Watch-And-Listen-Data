@@ -64,14 +64,15 @@ namespace WAL::AppImplementations
         bool isNextFileExist = true;
         while (isNextFileExist)
         {
-            IFile* file = this->fileDispencer->GetNextFile(isNextFileExist);
+            WAL::IFile* file = this->fileDispencer->GetNextFile(isNextFileExist);
             this->chunkDispencer = new WAL::FileChunkDispencer(file->GetBuffer(), fileChunkSize);
 
             bool isFileChunkFull = true;
             bool isNextPixelExist = true;
+            bool isNextFileChunkExist = true;
             while (isFileChunkFull && isNextPixelExist)
             {
-                auto currentFileChunk = this->chunkDispencer->GetNextChunk(fileChunkSize, isFileChunkFull);
+                auto currentFileChunk = this->chunkDispencer->GetNextChunk(fileChunkSize, isFileChunkFull, isNextFileChunkExist);
                 this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<PixelChannelType>(&currentFileChunk, pixelLenghtInBytes);//TODO: delete ptr, TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
                 
                 bool isNextPuttable = true;
@@ -141,10 +142,14 @@ namespace WAL::AppImplementations
     Resolution AppImplementation::GetDirectoryResolution()
     {
         //Directory handler
-        DirectoryHandler dirHandle(this->dir);
+        WAL::DirectoryHandler dirHandle(this->dir);
         size_t dirSize = dirHandle.GetAllFilesSize();
         float aspectRatio = 16 / 9;
-        return dirHandle.GetResolution(aspectRatio);
+        auto dirRes = dirHandle.GetResolution(aspectRatio);
+        Resolution res;
+        res.x = dirRes.x;
+        res.y = dirRes.y;
+        return res;
     }
 
     void AppImplementation::InitFileDispencer()

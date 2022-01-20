@@ -9,37 +9,43 @@
 
 namespace WAL
 {
-	namespace AppImplementations
-	{
-		//Forward decl
-		class IDirectory;
-		class IVideoEncoder;
-		template <typename T>
-		class PixelExtractor;
-		class FileDispencer;
-		class FileChunkDispencer;
-		template <typename T>
-		class IRawImageConverter;
+	class IDirectory;
+	class IVideoEncoder;
+	class FileDispencer;
+	class FileChunkDispencer;
+	template <typename T>
+	class IRawImageConverter;
 
+	namespace Vectors
+	{
 		template <typename T>
 		class TVec3;
 		template <typename T>
 		class TVec2;
+	};
+	namespace PixelExtractors
+	{
+		template <typename T>
+		class PixelExtractor;
+	};
+
+	namespace AppImplementations
+	{
 
 		typedef uint8_t PixelChannelType;
-		typedef TVec3<PixelChannelType> Pixel;
-		typedef TVec2<uint32_t> Resolution;
+		typedef Vectors::TVec3<PixelChannelType> Pixel;
+		typedef Vectors::TVec2<uint32_t> Resolution;
 
 		class AppImplementation final : public IApp
 		{
 		private:
 
-			IDirectory* dir{ nullptr };
-			IVideoEncoder* encoder{ nullptr };
-			PixelExtractor<PixelChannelType>* pixelExtractor{ nullptr };
-			FileDispencer* fileDispencer{ nullptr };
-			FileChunkDispencer* chunkDispencer{ nullptr };
-			IRawImageConverter<PixelChannelType>* rawImageConverter{ nullptr };
+			WAL::IDirectory* dir{ nullptr };
+			WAL::IVideoEncoder* encoder{ nullptr };
+			PixelExtractors::PixelExtractor<PixelChannelType>* pixelExtractor{ nullptr };
+			WAL::FileDispencer* fileDispencer{ nullptr };
+			WAL::FileChunkDispencer* chunkDispencer{ nullptr };
+			WAL::IRawImageConverter<PixelChannelType>* rawImageConverter{ nullptr };
 
 			/**
 			* Checks if next pixel exist
@@ -77,7 +83,7 @@ namespace WAL
 			void InitRawImageConverter();
 
 		public:
-			
+
 
 			AppImplementation() = default;
 			~AppImplementation();
@@ -90,5 +96,5 @@ namespace WAL
 
 		};
 
-	}
+	};
 }
