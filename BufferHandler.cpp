@@ -17,13 +17,13 @@ WAL::FileBufferHandler::FileBufferHandler(std::ifstream* strm): strm(strm)
 
 }
 
-bool WAL::FileBufferHandler::canGetBeforeEnd(size_t cout)
+bool WAL::FileBufferHandler::canGetBeforeEnd(size_t count)
 {
 	if (!strm) return false;
 
 	//check if all "get()" will fits in size, i.e. give data within size
 	std::streampos beginPos = strm->tellg();
-	strm->seekg(std::streamoff(cout)); //try to reach next position
+	strm->seekg(std::streamoff(count)); //try to reach next position
 	if (strm->eof()) //check if position is end of file
 	{
 		strm->seekg(beginPos);

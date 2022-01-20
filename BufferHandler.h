@@ -16,7 +16,7 @@ namespace WAL
 		/*
 		* Checks can we get() data from buffer within count before the end
 		*/
-		bool canGetBeforeEnd(size_t cout);
+		bool canGetBeforeEnd(size_t count);
 		size_t GetFileSize();
 		/*
 		* Get bytes from buffer
