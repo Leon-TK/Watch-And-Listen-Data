@@ -74,12 +74,6 @@
     <ClInclude Include="pixelextractor\PixelExtractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vectors\Vec2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="vectors\Vec3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ByteAssemble.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -133,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="Images.h">
       <Filter>Header Files\Impl\Images</Filter>
+    </ClInclude>
+    <ClInclude Include="Vectors\Vectors.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
