@@ -53,11 +53,16 @@ namespace WAL
 		template <typename T>
 		class PixelExtractor;
 	};
+	namespace Pixels
+	{
+		template <typename>
+		class TRgbPixel;
+	};
 
 	namespace Apps
 	{
 		typedef uint8_t PixelChannelType;
-		typedef Vectors::TVec3<PixelChannelType> Pixel;
+		typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
 		typedef Vectors::TVec2<uint32_t> Resolution;
 
 		class AppImplementation final : public Interface::IApp
