@@ -2,8 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "../ByteAssemble.h"
-#include "../Vectors/Vec2.h"
-#include "../Vectors/Vec3.h"
+#include "../Vectors/Vectors.h"
 
 /*    
 * Helper for extract pixels from binary buffer. You must to use buffer chunks instead as full one for better perfomance
@@ -13,9 +12,36 @@ namespace WAL
 	namespace Pixels
 	{
 		template <typename ChannelType>
-		class Pixel final
+		class TRgbPixel final
 		{
+			Vectors::TVec3<ChannelType> channels;
+		};
+		template <typename ChannelType>
+		class TRgbaPixel final
+		{
+			Vectors::TVec3<ChannelType> channels;
+			ChannelType alpha;
+		};
+		template <typename ChannelType>
+		class TMonoPixel final
+		{
+			ChannelType channel;
+		};
 
+		class RgbPixel final
+		{
+			Vectors::TVec3<uint8_t> channels;
+		};
+
+		class RgbaPixel final
+		{
+			Vectors::TVec3<uint8_t> channels;
+			uint8_t alpha;
+		};
+
+		class MonoPixel final
+		{
+			uint8_t channel;
 		};
 	}
 	/*template <typename T>
