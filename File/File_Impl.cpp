@@ -4,7 +4,7 @@
 #include "../BufferHandler.h"
 
 //#include <filesystem>
-namespace WAL
+namespace WAL::File
 {
     File_Impl::File_Impl(std::string& path)
     {

@@ -3,13 +3,13 @@
 #include "File/IFile.h"
 #include "File/File_Impl.h"
 
-namespace WAL
+namespace WAL::File
 {
 	FileDispencer::FileDispencer(const std::vector<std::string>& filePaths) : filePaths(filePaths)
 	{
 	}
 
-	IFile* FileDispencer::GetNextFile(bool& outIsNextExist)
+	Interface::IFile* FileDispencer::GetNextFile(bool& outIsNextExist)
 	{
 		if (nextFileIndex == filePaths.size())
 		{
@@ -19,7 +19,7 @@ namespace WAL
 		outIsNextExist = true;
 
 		auto filePath = filePaths.at(nextFileIndex);
-		IFile* file = new File_Impl(filePath);
+		Interface::IFile* file = new File_Impl(filePath);
 		nextFileIndex++;
 		return file;
 	}
