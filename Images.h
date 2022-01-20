@@ -1,10 +1,12 @@
+#pragma once
+#include "Images/IImage.h"
+#include <vector>
+
 namespace WAL
 {
 	namespace Images
 	{
-		//#include <vector>
-		#include "Images/IImage.h"
-
+	
 		using namespace WAL::Images::Interface;
 
 		class ABaseImage
