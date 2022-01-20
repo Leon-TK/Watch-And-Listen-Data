@@ -7,22 +7,25 @@
 
 namespace WAL
 {
+	class FileChunkDispencer;
+	class IFile;
+
 	namespace File
 	{
 		//Forwarding
-		class IFile;
+		
 
 		class FileHandler final
 		{
 		private:
 			size_t handledSize{ 0 };
 			const size_t chunkSize{ 0 };
-			IFile* file{ nullptr };
-			FileChunkDispencer* fileChunkDispenser{ nullptr };
+			WAL::IFile* file{ nullptr };
+			WAL::FileChunkDispencer* fileChunkDispenser{ nullptr };
 
 		public:
 			FileHandler() = delete;
-			FileHandler(IFile* file, const size_t chunkSize);
+			FileHandler(WAL::IFile* file, const size_t chunkSize);
 			~FileHandler();
 
 

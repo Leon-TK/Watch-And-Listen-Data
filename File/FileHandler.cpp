@@ -7,9 +7,9 @@
 
 namespace WAL::File
 {
-    FileHandler::FileHandler(IFile* file, const size_t chunkSize) : file(file), chunkSize(chunkSize)
+    FileHandler::FileHandler(WAL::IFile* file, const size_t chunkSize) : file(file), chunkSize(chunkSize)
     {
-        this->fileChunkDispenser = new FileChunkDispencer(this->file->GetBuffer()); //TODO delete
+        this->fileChunkDispenser = new WAL::FileChunkDispencer(this->file->GetBuffer(), this->chunkSize); //TODO delete
     }
 
     FileHandler::~FileHandler()
@@ -33,8 +33,9 @@ namespace WAL::File
 
         std::vector<uint8_t> data;
 
-        bool isComplete = false;
-        data = fileChunkDispenser->GetNextChunk(size, isComplete);
+        bool isComplete = true;
+        bool isNextExist = true;
+        data = fileChunkDispenser->GetNextChunk(size, isNextExist, isComplete);
         if (!isComplete) outIsNextExist = true; else outIsNextExist = false;
 
         return data;
