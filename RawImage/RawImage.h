@@ -1,7 +1,5 @@
 ﻿#pragma once
 #include <vector>
-#include "../Vectors/Vec2.h"
-#include "../Vectors/Vec3.h"
 
 /*    
 * Holds raw binary data in pixel containers. Should be converted to standart image formats except video encoder can work with raw data, otherwise you must convert raw data to foramt that encoder understand.
