@@ -12,12 +12,12 @@ namespace WAL
 { //Hello
 	namespace PixelExtractors
 	{
-		template <typename ChannelType>
+		template <typename PixelType>
 		struct SeparateChannels
 		{
-			std::vector<ChannelType> RedValues;
-			std::vector<ChannelType> GreenValues;
-			std::vector<ChannelType> BlueValues;
+			std::vector<PixelType> RedValues;
+			std::vector<PixelType> GreenValues;
+			std::vector<PixelType> BlueValues;
 		};
 	}
 
@@ -25,27 +25,27 @@ namespace WAL
 	{
 		typedef std::vector<uint8_t> ByteVector;
 
-		template <typename ChannelType>
+		template <typename PixelType>
 		class IFormDataForAverage
 		{
 		public:
 			virtual ~IFormDataForAverage() {};
-			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() = 0;
+			virtual PixelExtractors::SeparateChannels<PixelType>* Run() = 0;
 		};
 
-		template <typename ChannelType>
-		class SerialDivideForAverage final : public IFormDataForAverage<ChannelType>
+		template <typename PixelType>
+		class SerialDivideForAverage final : public IFormDataForAverage<PixelType>
 		{
 		public:
 			SerialDivideForAverage() = default;
 
-			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() override final
+			virtual PixelExtractors::SeparateChannels<PixelType>* Run() override final
 			{
 				return nullptr;
 			}
 		};
-		template <typename ChannelType>
-		class AlternatingDivideForAverage final : public IFormDataForAverage<ChannelType>
+		template <typename PixelType>
+		class AlternatingDivideForAverage final : public IFormDataForAverage<PixelType>
 		{
 		private:
 			const ByteVector& pixelBytes;
@@ -56,9 +56,9 @@ namespace WAL
 			AlternatingDivideForAverage(const ByteVector& pixelBytes, const size_t componentLen, const size_t componentCount)
 		    :componentCount(componentCount), pixelBytes(pixelBytes), componentLen(componentLen) {};
 
-			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() override final
+			virtual PixelExtractors::SeparateChannels<PixelType>* Run() override final
 			{
-				PixelExtractors::SeparateChannels<ChannelType>* channels = new PixelExtractors::SeparateChannels<ChannelType>();
+				PixelExtractors::SeparateChannels<PixelType>* channels = new PixelExtractors::SeparateChannels<PixelType>();
 				int g = 0;
 				for (int i = 0; i < this->componentLen; i++)
 				{
@@ -73,19 +73,17 @@ namespace WAL
 	}
 	namespace PixelExtractors
 	{
-		typedef Pixels::TRgbPixel<uint16_t> Pixel;
 		typedef Vectors::Vec2 Resolution;
 		typedef std::vector<uint8_t> ByteVector;
-		typedef std::vector<Pixel> PixelVector;
 
 		/*
 		* Extracts pixels from binary buffer
-		* @param ChannelType Which type of pixel to extract
+		* @param PixelType Which type of pixel to extract
 		*/
-		template <typename ChannelType>
+		template <typename PixelType>
 		class PixelExtractor final
 		{
-
+			typedef std::vector<PixelType> PixelVector;
 			const size_t pixelSizeInBytes{ 0 };
 			size_t handledPixelBytes{ 0 };
 
@@ -135,71 +133,71 @@ namespace WAL
 			/*
 			* Returns pixel while end of buffer is not reached
 			*/
-			Pixel GetNextPixel(bool& outIsNextPixelExist);
+			PixelType GetNextPixel(bool& outIsNextPixelExist);
 
 			bool canGetNextPixel();
 
 		};
 
-		template<typename ChannelType>
-		inline PixelExtractor<ChannelType>::PixelExtractor(ByteVector* buffer, const size_t pixelSizeInBytes) : buffer(buffer)
+		template<typename PixelType>
+		inline PixelExtractor<PixelType>::PixelExtractor(ByteVector* buffer, const size_t pixelSizeInBytes) : buffer(buffer)
 		{
 		}
 
-		template <typename ChannelType>
-		inline PixelVector PixelExtractor<ChannelType>::ExtractRow(size_t step, size_t maxLen)
+		template <typename PixelType>
+		inline std::vector<PixelType> PixelExtractor<PixelType>::ExtractRow(size_t step, size_t maxLen)
 		{
 		}
 
-		template <typename ChannelType>
-		inline PixelVector PixelExtractor<ChannelType>::GetRow(size_t step, size_t maxLen)
+		template <typename PixelType>
+		inline std::vector<PixelType> PixelExtractor<PixelType>::GetRow(size_t step, size_t maxLen)
 		{
 		}
 
-		template <typename ChannelType>
-		inline bool PixelExtractor<ChannelType>::canRowsFitToBuffer(size_t rowLen, size_t bufLen)
+		template <typename PixelType>
+		inline bool PixelExtractor<PixelType>::canRowsFitToBuffer(size_t rowLen, size_t bufLen)
 		{
 			return (bufLen % rowLen) == 0;
 		}
 
-		template<typename ChannelType>
-		inline std::vector<uint8_t> PixelExtractor<ChannelType>::GetPixelBytes()
+		template<typename PixelType>
+		inline std::vector<uint8_t> PixelExtractor<PixelType>::GetPixelBytes()
 		{
 			//get n bytes from array. how much to take calculates by dirRes / outputRes 
 			return ByteAssemble::DEPRECATED_GetBytesFrom<this->pixelSizeInBytes>(this->buffer); //TODO chanke from template to common func
 		}
 
-		template<typename ChannelType>
-		inline constexpr int PixelExtractor<ChannelType>::GetPixelComponentCount()
+		template<typename PixelType>
+		inline constexpr int PixelExtractor<PixelType>::GetPixelComponentCount()
 		{
 			return 3;
 		}
 
-		template<typename ChannelType>
-		inline size_t PixelExtractor<ChannelType>::GetChannelBytesLen()
+		template<typename PixelType>
+		inline size_t PixelExtractor<PixelType>::GetChannelBytesLen()
 		{
 			return (size_t)std::floor(this->pixelSizeInBytes / this->GetPixelComponentCount());
 		}
 
-		template<typename ChannelType>
-		inline PixelVector PixelExtractor<ChannelType>::ConvertChannelsBytesToPixels()
+		template<typename PixelType>
+		inline std::vector<PixelType> PixelExtractor<PixelType>::ConvertChannelsBytesToPixels()
 		{
 			if (canPixelTypesFitBuffer())
 			{
 				PixelVector pixels;
-				const auto pixelCount = buffer->size() / sizeof(ChannelType);
+				const auto pixelCount = buffer->size() / sizeof(PixelType);
 
 				//convert group of bytes to pixels
 				for (int i = 0; i < pixelCount; i++)
 				{
-					std::array<uint8_t, sizeof(ChannelType)> RawPixel;
+					std::array<uint8_t, sizeof(PixelType)> RawPixel;
 					int g = 0;
-					for (int j = 0; j < sizeof(ChannelType); j++)
+					for (int j = 0; j < sizeof(PixelType); j++)
 					{
 						RawPixel[j] = buffer->at(g + j);
-						g += sizeof(ChannelType);
+						g += sizeof(PixelType);
 					}
-					auto pixel = ByteAssemble::GlueBytesToChannel<ChannelType>(RawPixel);
+					auto pixel = ByteAssemble::GlueBytesToChannel<PixelType>(RawPixel);
 					pixels.push_back(pixel);
 				}
 
@@ -212,31 +210,31 @@ namespace WAL
 
 		}
 
-		template<typename ChannelType>
-		inline bool PixelExtractor<ChannelType>::canPixelTypesFitBuffer()
+		template<typename PixelType>
+		inline bool PixelExtractor<PixelType>::canPixelTypesFitBuffer()
 		{
-			return (buffer->size() % sizeof(ChannelType)) == 0;
+			return (buffer->size() % sizeof(PixelType)) == 0;
 		}
 
-		template<typename ChannelType>
-		inline void PixelExtractor<ChannelType>::SetNewBuffer(ByteVector* buffer)
+		template<typename PixelType>
+		inline void PixelExtractor<PixelType>::SetNewBuffer(ByteVector* buffer)
 		{
 			this->buffer = buffer;
 		}
 
-		template<typename ChannelType>
-		inline Pixel PixelExtractor<ChannelType>::GetNextPixel(bool& outIsNextPixelExist)
+		template<typename PixelType>
+		inline PixelType PixelExtractor<PixelType>::GetNextPixel(bool& outIsNextPixelExist)
 		{
 			if (!this->buffer)
 			{
 				outIsNextPixelExist = false;
-				return Pixel();
+				return PixelType();
 			}
 
 			if (this->pixelSizeInBytes == 0)
 			{
 				outIsNextPixelExist = false;
-				return Pixel(); //TODO through exception
+				return PixelType(); //TODO through exception
 			}
 			if (canGetNextPixel())
 			{
@@ -248,17 +246,17 @@ namespace WAL
 				PixelVector GreenPixels(channelLen);
 				PixelVector BluePixels(channelLen);
 
-				Dividers::IFormDataForAverage<ChannelType>* getForAverage = Dividers::AlternatingDivideForAverage<ChannelType>(pixelBytes, channelLen, 3); //TODO delete
+				Dividers::IFormDataForAverage<PixelType>* getForAverage = Dividers::AlternatingDivideForAverage<PixelType>(pixelBytes, channelLen, 3); //TODO delete
 				SeparateChannels* channels = getForAverage->Run(); //TODO delete
 
 				//get average in each chunk
-				ChannelType R = ByteAssemble::GetAverageFrom<ChannelType>(*channels.RedValues, channelLen);
-				ChannelType G = ByteAssemble::GetAverageFrom<ChannelType>(*channels.GreenValues, channelLen);
-				ChannelType B = ByteAssemble::GetAverageFrom<ChannelType>(*channels.BlueValues, channelLen);
+				PixelType R = ByteAssemble::GetAverageFrom<PixelType>(*channels.RedValues, channelLen);
+				PixelType G = ByteAssemble::GetAverageFrom<PixelType>(*channels.GreenValues, channelLen);
+				PixelType B = ByteAssemble::GetAverageFrom<PixelType>(*channels.BlueValues, channelLen);
 				//save average to 3 component of pixel
 				this->handledPixelBytes += this->pixelSizeInBytes;
 				outIsNextPixelExist = canGetNextPixel();
-				return Pixel(R, G, B);
+				return PixelType(R, G, B);
 			}
 			else
 			{
@@ -266,8 +264,8 @@ namespace WAL
 			}
 		
 		}
-		template<typename ChannelType>
-		inline bool PixelExtractor<ChannelType>::canGetNextPixel()
+		template<typename PixelType>
+		inline bool PixelExtractor<PixelType>::canGetNextPixel()
 		{
 			return !((handledPixelBytes + pixelSizeInBytes) > buffer->size());
 		}
