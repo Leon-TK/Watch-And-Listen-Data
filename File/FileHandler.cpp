@@ -7,23 +7,43 @@
 
 namespace WAL::File
 {
-    FileHandler::FileHandler(IFile* file) : file(file)
+    FileHandler::FileHandler(IFile* file, const size_t chunkSize) : file(file), chunkSize(chunkSize)
     {
+        this->fileChunkDispenser = new FileChunkDispencer(this->file->GetBuffer()); //TODO delete
+    }
+
+    FileHandler::~FileHandler()
+    {
+        delete fileChunkDispenser;
     }
 
     std::vector<uint8_t> FileHandler::GetNextChunk(size_t size, bool& outIsNextExist)
     {
-        if (file == nullptr) return std::vector<uint8_t>(0);
+        if (file == nullptr)
+        {
+            outIsNextExist = false;
+            return std::vector<uint8_t>(0);
+        }
         
-        FileChunkDispencer dispenser(this->file->GetBuffer());
+        if (canGetNextChunk())
+        {
+
+        }
+        
 
         std::vector<uint8_t> data;
 
         bool isComplete = false;
-        data = dispenser.GetNextChunk(size, isComplete);
+        data = fileChunkDispenser->GetNextChunk(size, isComplete);
         if (!isComplete) outIsNextExist = true; else outIsNextExist = false;
+
         return data;
 
+    }
+
+    bool FileHandler::canGetNextChunk()
+    {
+        return false;
     }
 
 }

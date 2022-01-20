@@ -15,13 +15,14 @@ namespace WAL
 		class FileHandler final
 		{
 		private:
-			size_t currentPos{ 0 };
-			//size_t handledSize{ 0 };
+			size_t handledSize{ 0 };
+			const size_t chunkSize{ 0 };
 			IFile* file{ nullptr };
+			FileChunkDispencer* fileChunkDispenser{ nullptr };
 
 		public:
 			FileHandler() = delete;
-			FileHandler(IFile* file);
+			FileHandler(IFile* file, const size_t chunkSize);
 
 
 			/**
@@ -29,6 +30,7 @@ namespace WAL
 			* @param size
 			*/
 			std::vector<uint8_t> GetNextChunk(size_t size, bool& outIsNextExist);
+			bool canGetNextChunk();
 
 		};
 	}
