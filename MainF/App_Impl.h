@@ -15,19 +15,22 @@ namespace WAL
 		{
 			class IDirectory;
 		}
-	}
+	};
+
 	namespace Encoders
 	{
 		namespace Interface
 		{
 			class IVideoEncoder;
 		}
-	}
+	};
+
 	namespace File
 	{
 		class FileDispencer;
 		class FileChunkDispencer;
-	}
+	};
+
 	namespace Converter
 	{
 		namespace Interface
@@ -35,9 +38,8 @@ namespace WAL
 			template <typename T>
 			class IRawImageConverter;
 		}
-	}
+	};
 	
-
 	namespace Vectors
 	{
 		template <typename T>
@@ -45,6 +47,7 @@ namespace WAL
 		template <typename T>
 		class TVec2;
 	};
+
 	namespace PixelExtractors
 	{
 		template <typename T>
@@ -61,12 +64,12 @@ namespace WAL
 		{
 		private:
 
-			WAL::IDirectory* dir{ nullptr };
-			WAL::IVideoEncoder* encoder{ nullptr };
+			Directory::Interface::IDirectory* dir{ nullptr };
+			Encoders::Interface::IVideoEncoder* encoder{ nullptr };
 			PixelExtractors::PixelExtractor<PixelChannelType>* pixelExtractor{ nullptr };
-			WAL::FileDispencer* fileDispencer{ nullptr };
-			WAL::FileChunkDispencer* chunkDispencer{ nullptr };
-			WAL::IRawImageConverter<PixelChannelType>* rawImageConverter{ nullptr };
+			File::FileDispencer* fileDispencer{ nullptr };
+			File::FileChunkDispencer* chunkDispencer{ nullptr };
+			Converter::Interface::IRawImageConverter<PixelChannelType>* rawImageConverter{ nullptr };
 
 			/**
 			* Checks if next pixel exist

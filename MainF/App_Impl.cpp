@@ -64,8 +64,8 @@ namespace WAL::Apps
         bool isNextFileExist = true;
         while (isNextFileExist)
         {
-            WAL::IFile* file = this->fileDispencer->GetNextFile(isNextFileExist);
-            this->chunkDispencer = new WAL::FileChunkDispencer(file->GetBuffer(), fileChunkSize);
+            File::Interface::IFile* file = this->fileDispencer->GetNextFile(isNextFileExist);
+            this->chunkDispencer = new File::FileChunkDispencer(file->GetBuffer(), fileChunkSize);
 
             bool isFileChunkFull = true;
             bool isNextPixelExist = true;
@@ -136,13 +136,13 @@ namespace WAL::Apps
     void AppImplementation::InitDirectory()
     {
         std::string path = "C:\\Users\\leon2\\Desktop\\Garbage";
-        this->dir = new WAL::Directory_Impl(path);
+        this->dir = new Directory::Directory_Impl(path);
     }
 
     Resolution AppImplementation::GetDirectoryResolution()
     {
         //Directory handler
-        WAL::DirectoryHandler dirHandle(this->dir);
+        Directory::DirectoryHandler dirHandle(this->dir);
         size_t dirSize = dirHandle.GetAllFilesSize();
         float aspectRatio = 16 / 9;
         auto dirRes = dirHandle.GetResolution(aspectRatio);
@@ -154,7 +154,7 @@ namespace WAL::Apps
 
     void AppImplementation::InitFileDispencer()
     {
-        this->fileDispencer = new WAL::FileDispencer(this->dir->GetPaths());
+        this->fileDispencer = new File::FileDispencer(this->dir->GetPaths());
     }
 
     void AppImplementation::InitChunkDispencer()
@@ -164,11 +164,11 @@ namespace WAL::Apps
 
     void AppImplementation::InitEncoder()
     {
-        this->encoder = new WAL::h256Encoder();
+        this->encoder = new Encoders::h256Encoder();
     }
 
     void AppImplementation::InitRawImageConverter()
     {
-        this->rawImageConverter = new WAL::RawToPngConverter_Impl<PixelChannelType>();
+        this->rawImageConverter = new Converter::RawToPngConverter_Impl<PixelChannelType>();
     }
 }
