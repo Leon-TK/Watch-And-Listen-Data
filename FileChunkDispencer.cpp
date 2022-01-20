@@ -6,23 +6,38 @@ namespace WAL
 {
 	FileChunkDispencer::FileChunkDispencer(std::ifstream& strm, const size_t chunkSize) : strm(strm), chunkSize(chunkSize)
 	{
+		fileBufferHandler = new FileBufferHandler(&this->strm);
 	}
 
-	std::vector<uint8_t> FileChunkDispencer::GetNextChunk(size_t size, bool& outIsComplete)
+	FileChunkDispencer::~FileChunkDispencer()
 	{
-		FileBufferHandler fHandler(&this->strm);
-		
-		if (fHandler.canGetBeforeEnd(size))
+		delete fileBufferHandler;
+	}
+
+	std::vector<uint8_t> FileChunkDispencer::GetNextChunk(size_t size, bool& outIsNextExist, bool& outIsComplete)
+	{
+		if (this->canGetNextChunk())
 		{
-			return fHandler.GetDataBytes(size, false, outIsComplete);
+			auto data = this->fileBufferHandler->GetDataBytes(size, false, outIsComplete);
+			outIsNextExist = this->canGetNextChunk();
+			return data;
 		}
 		else
 		{
-			return fHandler.GetDataBytes(size, false, outIsComplete);
+			outIsNextExist = false;
+			outIsComplete = false;
+			return std::vector<uint8_t>(0);
 		}
 	}
 	bool FileChunkDispencer::canGetNextChunk()
 	{
-		return false;
+		if (fileBufferHandler->canGetBeforeEnd(this->chunkSize))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
