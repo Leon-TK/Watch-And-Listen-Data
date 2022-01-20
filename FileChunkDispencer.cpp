@@ -2,7 +2,7 @@
 #include "FileChunkDispencer.h"
 #include "BufferHandler.h"
 
-namespace WAL
+namespace WAL::File
 {
 	FileChunkDispencer::FileChunkDispencer(std::ifstream& strm, const size_t chunkSize) : strm(strm), chunkSize(chunkSize)
 	{
