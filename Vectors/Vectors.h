@@ -29,7 +29,7 @@ namespace WAL
 
 			const TVec3 operator=(const TVec3& rhs)
 			{
-				return TVec3(rhs.x, rhs.y, ths.z);
+				return TVec3(rhs.x, rhs.y, rhs.z);
 			}
 		};
 
@@ -52,6 +52,7 @@ namespace WAL
 		{
 			uint32_t x;
 			uint32_t y;
+			uint32_t z;
 
 			Vec3() : x(0), y(0), z(0) {};
 			Vec3(const uint32_t x, const uint32_t y, const uint32_t z) : x(x), y(y), z(z) {};

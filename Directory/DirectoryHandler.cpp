@@ -2,9 +2,10 @@
 #include "DirectoryHandler.h"
 #include "../File/IFile.h"
 #include "../File/File_Impl.h"
-#include "../Vectors/Vec2.h"
 #include "IDirectory.h"
 #include <cmath>
+#include "../Vectors/Vectors.h"
+
 namespace WAL
 {
     DirectoryHandler::DirectoryHandler(IDirectory* dir) : dir(dir)
@@ -33,7 +34,7 @@ namespace WAL
         return totalSize;
     }
 
-    Vec2<uint16_t> DirectoryHandler::GetResolution(float aspectRatio) const
+    TVec2<uint16_t> DirectoryHandler::GetResolution(float aspectRatio) const
     {
         size_t dirSize = this->GetAllFilesSize();
         float x;
@@ -43,7 +44,7 @@ namespace WAL
         x = aspectRatio * y;
 
         //TODO ceil or floor x and y for not missing data
-        Vec2<uint16_t> res((uint16_t)x, (uint16_t)y);
+        TVec2<uint16_t> res((uint16_t)x, (uint16_t)y);
 
         return res;
     }

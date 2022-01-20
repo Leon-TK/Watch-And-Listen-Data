@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <vector>
 #include <string>
-//#include "../Vectors/Vec2.h"
 
 /*    
 * Wraps directory into context
@@ -12,7 +11,7 @@ namespace WAL
 	//Forwarding
 	class IDirectory;
 	template<typename>
-	class Vec2;
+	class TVec2;
 
 	class DirectoryHandler final
 	{
@@ -33,7 +32,7 @@ namespace WAL
 		* Calculates directory "resolution" for further calcultaions
 		* @param aspectRatio
 		*/
-		Vec2<uint16_t> GetResolution(float aspectRatio) const;
+		TVec2<uint16_t> GetResolution(float aspectRatio) const;
 
 	};
 }

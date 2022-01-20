@@ -4,7 +4,7 @@
 
 int main()
 {
-	WAL::IApp* app = new WAL::AppImplementation();
+	WAL::IApp* app = new WAL::AppImplementations::AppImplementation();
 	app->Init();
 	app->Run();
 	app->Shutdown();

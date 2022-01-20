@@ -32,7 +32,8 @@ namespace WAL
 
 	bool FileChunkDispencer::canGetNextChunk()
 	{
-		if (fileBufferHandler->canGetBeforeEnd(this->chunkSize))
+		size_t remaining = 0;
+		if (fileBufferHandler->canGetBeforeEnd(this->chunkSize, remaining))
 		{
 			return true;
 		}
