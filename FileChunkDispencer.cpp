@@ -29,6 +29,7 @@ namespace WAL
 			return std::vector<uint8_t>(0);
 		}
 	}
+
 	bool FileChunkDispencer::canGetNextChunk()
 	{
 		if (fileBufferHandler->canGetBeforeEnd(this->chunkSize))

@@ -34,11 +34,4 @@ namespace WAL
 		bool canGetNextChunk();
 	};
 
-	class StreamChunkManager
-	{
-	private:
-		std::ifstream& strm;
-	public:
-		//void Init(std::ifstream* strm);
-	};
 }
