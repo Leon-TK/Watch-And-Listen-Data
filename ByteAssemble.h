@@ -26,6 +26,7 @@ namespace WAL
 		}
 
 		/*
+		* DEPRECATED. Use filebufferhandler
 		* Stream must be in binary mode. Uses standart iostream get()
 		* @param Size How much bytes to extract
 		*/
@@ -45,8 +46,8 @@ namespace WAL
 		/*
 		* It uses std::ceil
 		*/
-		template <typename T>
-		T GetAverageFrom(std::vector<T>& arr, size_t size)
+		template <typename Type>
+		Type GetAverageFrom(std::vector<Type>& arr, size_t size)
 		{
 			size_t sum = 0;
 
@@ -55,7 +56,7 @@ namespace WAL
 				sum += (size_t)arr.at(i);
 			}
 
-			return (T)std::ceil(sum / size);
+			return (Type)std::ceil(sum / size); //TODO use ceil or what?
 		}
 	}
 	
