@@ -12,6 +12,8 @@ namespace WAL
 { //Hello
 	namespace Dividers
 	{
+		typedef std::vector<uint8_t> ByteVector;
+
 		template <typename>
 		struct SeparatePixels;
 
@@ -20,7 +22,7 @@ namespace WAL
 		{
 		public:
 			virtual ~IFormDataForAverage() {};
-			virtual SeparatePixels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) = 0;
+			virtual SeparatePixels<ChannelType>* Run() = 0;
 		};
 
 		template <typename ChannelType>
@@ -29,7 +31,7 @@ namespace WAL
 		public:
 			SerialDivideForAverage() = default;
 
-			virtual SeparatePixels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) override final
+			virtual SeparatePixels<ChannelType>* Run() override final
 			{
 				return nullptr;
 			}
@@ -37,19 +39,25 @@ namespace WAL
 		template <typename ChannelType>
 		class AlternatingDivideForAverage final : public IFormDataForAverage<ChannelType>
 		{
-		public:
-			AlternatingDivideForAverage() = default;
+		private:
+			const ByteVector& pixelBytes;
+			const size_t componentLen;
+			const size_t componentCount;
 
-			virtual SeparatePixels<ChannelType>* Run(ByteVector& pixelBytes, size_t componentLen) override final
+		public:
+			AlternatingDivideForAverage(const ByteVector& pixelBytes, const size_t componentLen, const size_t componentCount)
+		    :componentCount(componentCount), pixelBytes(pixelBytes), componentLen(componentLen) {};
+
+			virtual SeparatePixels<ChannelType>* Run() override final
 			{
 				SeparatePixels<ChannelType>* channels = new SeparatePixels<ChannelType>();
 				int g = 0;
-				for (int i = 0; i < componentLen; i++)
+				for (int i = 0; i < this->componentLen; i++)
 				{
-					channels.RedValues.at(i) = pixelBytes.at(g);
-					channels.GreenValues.at(i) = pixelBytes.at(g + 1);
-					channels.BlueValues.at(i) = pixelBytes.at(g + 2);
-					g += GetPixelComponentCount(); //TODO
+					channels.RedValues.at(i) = this->pixelBytes.at(g);
+					channels.GreenValues.at(i) = this->pixelBytes.at(g + 1);
+					channels.BlueValues.at(i) = this->pixelBytes.at(g + 2);
+					g += this->componentCount; //TODO
 				}
 				return channels;
 			}
@@ -61,10 +69,6 @@ namespace WAL
 		typedef Vectors::Vec2 Resolution;
 		typedef std::vector<uint8_t> ByteVector;
 		typedef std::vector<Pixel> PixelVector;
-		/*template <typename T>
-		class Vec3;
-		template <typename T>
-		class Vec2;*/
 
 		/*
 		* Extracts pixels from binary buffer
@@ -194,7 +198,7 @@ namespace WAL
 						RawPixel[j] = buffer->at(g + j);
 						g += sizeof(ChannelType);
 					}
-					auto pixel = ByteAssemble::GlueBytes<sizeof(ChannelType)>(RawPixel);
+					auto pixel = ByteAssemble::GlueBytesToChannel<ChannelType>(RawPixel);
 					pixels.push_back(pixel);
 				}
 
@@ -243,8 +247,8 @@ namespace WAL
 				PixelVector GreenPixels(channelLen);
 				PixelVector BluePixels(channelLen);
 
-				Dividers::IFormDataForAverage<ChannelType>* getForAverage = Dividers::AlternatingDivideForAverage<ChannelType>();
-				SparseChannels* channels = getForAverage->Run(pixels);
+				Dividers::IFormDataForAverage<ChannelType>* getForAverage = Dividers::AlternatingDivideForAverage<ChannelType>(pixelBytes, channelLen, 3);
+				SparseChannels* channels = getForAverage->Run();
 
 				//get average in each chunk
 				ChannelType R = ByteAssemble::GetAverageFrom<ChannelType>(*channels.RedValues, componentLen);
