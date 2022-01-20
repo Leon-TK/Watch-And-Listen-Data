@@ -63,7 +63,8 @@ std::vector<uint8_t> WAL::FileBufferHandler::GetDataBytes(size_t count, bool doR
 	auto beginPos = strm->tellg();
 
 	std::vector<uint8_t> arr(count);
-	if (this->canGetBeforeEnd(count))
+	size_t remaining = 0;
+	if (this->canGetBeforeEnd(count, remaining))
 	{
 		arr = this->ExtractData(count);
 		if (doReturnPointer) strm->seekg(beginPos);
@@ -72,15 +73,8 @@ std::vector<uint8_t> WAL::FileBufferHandler::GetDataBytes(size_t count, bool doR
 	}
 	else
 	{
-		auto beginPos = strm->tellg();
-		strm->seekg(0, std::ifstream::end); //seek end
-		auto eofPos = strm->tellg();
-		strm->seekg(beginPos);
-
-		auto offset = eofPos - beginPos;
-
 		//extract remaining bytes
-		arr = this->ExtractData(offset);
+		arr = this->ExtractData(remaining);
 
 		if (doReturnPointer) strm->seekg(beginPos);
 		outIsComplete = false;
