@@ -69,7 +69,7 @@ namespace WAL
 		{
 			if (canPutNextPixel())
 			{
-				if (nextPxlX == GetSizeX)
+				if (nextPxlX == GetSizeX())
 				{
 					nextPxlY++;
 					nextPxlX = 0;
@@ -96,7 +96,7 @@ namespace WAL
 		template<typename PixelType>
 		inline bool TRawImage<PixelType>::canPutNextPixel()
 		{
-			if ((nextPxlX == GetSizeX) && (nextPxlY == GetSizeY - 1)) return false;
+			if ((nextPxlX == GetSizeX()) && (nextPxlY == GetSizeY() - 1)) return false;
 			else return true;
 		}
 
@@ -128,7 +128,7 @@ namespace WAL
 		template<typename PixelType>
 		inline PixelType TRawImage<PixelType>::GetPixel(uint32_t x, uint32_t y)
 		{
-			return data->data[x + y * this->x];
+			return data->data[x + y * GetSizeX()];
 		}
 		template<typename PixelType>
 		inline void TRawImage<PixelType>::RestartPutNextPixel()
