@@ -25,27 +25,27 @@ namespace WAL
 	{
 		typedef std::vector<uint8_t> ByteVector;
 
-		template <typename PixelType>
+		template <typename ChannelType>
 		class IFormDataForAverage
 		{
 		public:
 			virtual ~IFormDataForAverage() {};
-			virtual PixelExtractors::SeparateChannels<PixelType>* Run() = 0;
+			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() = 0;
 		};
 
-		template <typename PixelType>
-		class SerialDivideForAverage final : public IFormDataForAverage<PixelType>
+		template <typename ChannelType>
+		class SerialDivideForAverage final : public IFormDataForAverage<ChannelType>
 		{
 		public:
 			SerialDivideForAverage() = default;
 
-			virtual PixelExtractors::SeparateChannels<PixelType>* Run() override final
+			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() override final
 			{
 				return nullptr;
 			}
 		};
-		template <typename PixelType>
-		class AlternatingDivideForAverage final : public IFormDataForAverage<PixelType>
+		template <typename ChannelType>
+		class AlternatingDivideForAverage final : public IFormDataForAverage<ChannelType>
 		{
 		private:
 			const ByteVector& pixelBytes;
@@ -56,9 +56,9 @@ namespace WAL
 			AlternatingDivideForAverage(const ByteVector& pixelBytes, const size_t componentLen, const size_t componentCount)
 		    :componentCount(componentCount), pixelBytes(pixelBytes), componentLen(componentLen) {};
 
-			virtual PixelExtractors::SeparateChannels<PixelType>* Run() override final
+			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() override final
 			{
-				PixelExtractors::SeparateChannels<PixelType>* channels = new PixelExtractors::SeparateChannels<PixelType>();
+				PixelExtractors::SeparateChannels<ChannelType>* channels = new PixelExtractors::SeparateChannels<ChannelType>();
 				int g = 0;
 				for (int i = 0; i < this->componentLen; i++)
 				{
@@ -288,7 +288,7 @@ namespace WAL
 		inline SeparateChannels<uint8_t> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk) //TODO redo this shit
 		{
 
-			Dividers::IFormDataForAverage<PixelType>* getForAverage = Dividers::AlternatingDivideForAverage<PixelType>(pixelChunk, channelLen, 3); //TODO delete
+			Dividers::IFormDataForAverage<uint8_t>* getForAverage = Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk, channelLen, 3); //TODO delete
 			return getForAverage->Run(); //TODO delete
 
 			//if (canPixelTypesFitBuffer())
