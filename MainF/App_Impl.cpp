@@ -53,14 +53,15 @@ namespace WAL::Apps
         InitFileDispencer();
         //InitChunkDispencer();
 
-        constexpr size_t fileChunkSize = 2000;
+        constexpr size_t fileChunkSize = 2000; //TODO precalculate
         const Resolution outputRes(1920, 1080);
         auto pixelLenghtInBytes = (size_t)std::ceil((directoryRes.x * directoryRes.y) / (outputRes.x * outputRes.y)); //TODO ceil or what?
 
         //Raw rawImage
-        RawImages::TRawImage<Pixel> rawImage(outputRes.x, outputRes.x); //todo raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
+        RawImages::TRawImage<Pixel> rawImage(outputRes.x, outputRes.x); //TODO raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
         
 
+        //Loop through all files
         bool isNextFileExist = true;
         while (isNextFileExist)
         {
@@ -68,23 +69,27 @@ namespace WAL::Apps
             this->chunkDispencer = new File::FileChunkDispencer(file->GetBuffer(), fileChunkSize);
 
             bool isFileChunkFull = true;
-            bool isNextPixelExist = true;
+            
             bool isNextFileChunkExist = true;
-            while (isFileChunkFull && isNextPixelExist)
+            while (isFileChunkFull && isNextPixelExist)// while isNextFileChunkExist
             {
                 auto currentFileChunk = this->chunkDispencer->GetNextChunk(fileChunkSize, isFileChunkFull, isNextFileChunkExist);
                 this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<Pixel>(&currentFileChunk, pixelLenghtInBytes);//TODO: delete ptr, TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
-                
+
+                bool isNextPixelExist = true;
                 bool isNextPuttable = true;
-                Pixel pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist); //TODO pixels type
+                Pixel pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist); //TODO pixels type //while isNextPixelExist and isNextPuttable
                 rawImage.PutNextPixel(pixel, isNextPuttable);
                 delete this->pixelExtractor;
 
                 this->encoder->AddAsFrame(rawImageConverter->Convert(rawImage));// TODO convert raw image to common image;
+                //~while isNextPixelExist and isNextPuttable
             }
             //TODO last unfilled chunk remain unhandled.
             delete this->chunkDispencer;
         }
+        //~Loop through all files
+        
         //save video file
         std::string outputPath = "C:\\Users\\leon2\\Desktop\\Garbage";
         this->encoder->SaveAsFile(outputPath);
