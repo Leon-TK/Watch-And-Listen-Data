@@ -218,7 +218,7 @@ namespace WAL
 				{
 					vec.at(i) = fileBufferChunk->at(i); //TODO get bext ...
 				}
-				this->handledPixelBytes += this->pixelSizeInBytes();
+				this->handledPixelBytes += this->pixelSizeInBytes;
 				outIsNextChunkExist = isNextPixelChunkExist();
 				return PixelChunk(vec);
 			}
@@ -255,33 +255,33 @@ namespace WAL
 			return this->GetPixelFrom(channels);
 	
 
-			//old
-			if (canPixelTypesFitBuffer())
-			{
-				PixelVector pixels;
-				const auto pixelCount = fileBufferChunk->size() / sizeof(PixelType);
+			////old
+			//if (canPixelTypesFitBuffer())
+			//{
+			//	PixelVector pixels;
+			//	const auto pixelCount = fileBufferChunk->size() / sizeof(PixelType);
 
-				//convert group of bytes to pixels
-				for (int i = 0; i < pixelCount; i++)
-				{
-					std::array<uint8_t, sizeof(PixelType)> RawPixel;
-					int g = 0;
-					for (int j = 0; j < sizeof(PixelType); j++)
-					{
-						RawPixel[j] = fileBufferChunk->at(g + j);
-						g += sizeof(PixelType);
-					}
-					auto pixel = ByteAssemble::GlueBytesToChannel<PixelType>(RawPixel);
-					pixels.push_back(pixel);
-				}
+			//	//convert group of bytes to pixels
+			//	for (int i = 0; i < pixelCount; i++)
+			//	{
+			//		std::array<uint8_t, sizeof(PixelType)> RawPixel;
+			//		int g = 0;
+			//		for (int j = 0; j < sizeof(PixelType); j++)
+			//		{
+			//			RawPixel[j] = fileBufferChunk->at(g + j);
+			//			g += sizeof(PixelType);
+			//		}
+			//		auto pixel = ByteAssemble::GlueBytesToChannel<PixelType>(RawPixel);
+			//		pixels.push_back(pixel);
+			//	}
 
-				return pixels;
-			}
-			else
-			{
-				return PixelVector(0);
-			}
-			//~old
+			//	return pixels;
+			//}
+			//else
+			//{
+			//	return PixelVector(0);
+			//}
+			////~old
 
 		}
 		template<typename PixelType>

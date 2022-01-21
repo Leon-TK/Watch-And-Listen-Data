@@ -123,7 +123,7 @@ namespace WAL
 		template<typename PixelType>
 		inline void TRawImage<PixelType>::SetPixel(PixelType& pxl, uint32_t x, uint32_t y)
 		{
-			data->data[x + y * this->x] = pxl;
+			data->data[x + y * GetSizeX()] = pxl;
 		}
 		template<typename PixelType>
 		inline PixelType TRawImage<PixelType>::GetPixel(uint32_t x, uint32_t y)
