@@ -288,7 +288,7 @@ namespace WAL
 		inline SeparateChannels<uint8_t> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk) //TODO redo this shit
 		{
 
-			Dividers::IFormDataForAverage<uint8_t>* getForAverage = Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk, channelLen, 3); //TODO delete
+			Dividers::IFormDataForAverage<uint8_t>* getForAverage = Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk, GetChannelLenInBytes(), 3); //TODO delete
 			return getForAverage->Run(); //TODO delete
 
 			//if (canPixelTypesFitBuffer())
@@ -330,9 +330,9 @@ namespace WAL
 		{
 
 			//old
-			uint8_t R = ByteAssemble::GetAverageFrom<uint8_t>(channels.RedValues, channelLen); //TODO channeltype instead of pixeltype
-			uint8_t G = ByteAssemble::GetAverageFrom<uint8_t>(channels.GreenValues, channelLen);
-			uint8_t B = ByteAssemble::GetAverageFrom<uint8_t>(channels.BlueValues, channelLen);
+			uint8_t R = ByteAssemble::GetAverageFrom<uint8_t>(separateChannels.RedValues, GetChannelLenInBytes()); //TODO channeltype instead of pixeltype
+			uint8_t G = ByteAssemble::GetAverageFrom<uint8_t>(separateChannels.GreenValues, GetChannelLenInBytes());
+			uint8_t B = ByteAssemble::GetAverageFrom<uint8_t>(separateChannels.BlueValues, GetChannelLenInBytes());
 			//~old
 
 			PixelType pixel;
