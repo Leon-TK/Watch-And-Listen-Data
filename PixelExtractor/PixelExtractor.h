@@ -335,7 +335,12 @@ namespace WAL
 			uint8_t B = ByteAssemble::GetAverageFrom<uint8_t>(channels.BlueValues, channelLen);
 			//~old
 
-			return PixelType();
+			PixelType pixel;
+			pixel.channels.at(0) = R;
+			pixel.channels.at(1) = G;
+			pixel.channels.at(2) = B;
+
+			return pixel;
 		}
 
 		template<typename PixelType>
@@ -367,18 +372,11 @@ namespace WAL
 
 				auto channelLen = GetChannelLenInBytes();
 				auto pixel = ConvertPixelChunkToPixel(pixelChunk);
-				//old
-				PixelVector pixels = ConvertPixelChunkToPixel();
-
-				//get average in each chunk
-				PixelType R = ByteAssemble::GetAverageFrom<PixelType>(*channels.RedValues, channelLen);
-				PixelType G = ByteAssemble::GetAverageFrom<PixelType>(*channels.GreenValues, channelLen);
-				PixelType B = ByteAssemble::GetAverageFrom<PixelType>(*channels.BlueValues, channelLen);
-				//save average to 3 component of pixel
+	
 				this->handledPixelBytes += this->pixelSizeInBytes;
 				outIsNextPixelExist = canGetNextPixel();
-				//~old
-				return PixelType(R, G, B);
+
+				return pixel;
 			}
 			else
 			{
