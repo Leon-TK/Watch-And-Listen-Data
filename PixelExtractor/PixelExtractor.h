@@ -374,7 +374,6 @@ namespace WAL
 				auto pixel = ConvertPixelChunkToPixel(pixelChunk);
 	
 				this->handledPixelBytes += this->pixelSizeInBytes;
-				outIsNextPixelExist = canGetNextPixel();
 
 				return pixel;
 			}
