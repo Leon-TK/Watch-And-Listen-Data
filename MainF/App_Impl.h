@@ -71,10 +71,10 @@ namespace WAL
 
 			Directory::Interface::IDirectory* dir{ nullptr };
 			Encoders::Interface::IVideoEncoder* encoder{ nullptr };
-			PixelExtractors::PixelExtractor<PixelChannelType>* pixelExtractor{ nullptr };
+			PixelExtractors::PixelExtractor<Pixel>* pixelExtractor{ nullptr };
 			File::FileDispencer* fileDispencer{ nullptr };
 			File::FileChunkDispencer* chunkDispencer{ nullptr };
-			Converter::Interface::IRawImageConverter<PixelChannelType>* rawImageConverter{ nullptr };
+			Converter::Interface::IRawImageConverter<Pixel>* rawImageConverter{ nullptr };
 
 			/**
 			* Checks if next pixel exist
