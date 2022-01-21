@@ -26,15 +26,15 @@ namespace WAL
 		typedef std::vector<uint8_t> ByteVector;
 
 		template <typename ChannelType>
-		class IFormDataForAverage
+		class ICreateSeparateChannels
 		{
 		public:
-			virtual ~IFormDataForAverage() {};
+			virtual ~ICreateSeparateChannels() {};
 			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() = 0;
 		};
 
 		template <typename ChannelType>
-		class SerialDivideForAverage final : public IFormDataForAverage<ChannelType>
+		class SerialDivideForAverage final : public ICreateSeparateChannels<ChannelType>
 		{
 		public:
 			SerialDivideForAverage() = default;
@@ -45,7 +45,7 @@ namespace WAL
 			}
 		};
 		template <typename ChannelType>
-		class AlternatingDivideForAverage final : public IFormDataForAverage<ChannelType>
+		class AlternatingDivideForAverage final : public ICreateSeparateChannels<ChannelType>
 		{
 		private:
 			const ByteVector& pixelBytes;
@@ -288,8 +288,8 @@ namespace WAL
 		inline SeparateChannels<uint8_t> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk) //TODO redo this shit
 		{
 
-			Dividers::IFormDataForAverage<uint8_t>* getForAverage = Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk, GetChannelLenInBytes(), 3); //TODO delete
-			return getForAverage->Run(); //TODO delete
+			Dividers::ICreateSeparateChannels<uint8_t>* getSeparateChannels = Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk, GetChannelLenInBytes(), 3); //TODO delete
+			return getSeparateChannels->Run(); //TODO delete
 
 			//if (canPixelTypesFitBuffer())
 			//{
