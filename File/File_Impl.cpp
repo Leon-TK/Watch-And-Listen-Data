@@ -23,7 +23,7 @@ namespace WAL::File
 
     size_t File_Impl::GetFileSize()
     {
-        FileBufferHandler handler(&this->file);
+        BufferHandlers::FileBufferHandler handler(&this->file);
         return handler.GetFileSize();
     }
 
