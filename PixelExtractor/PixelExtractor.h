@@ -288,8 +288,10 @@ namespace WAL
 		inline SeparateChannels<uint8_t> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk) //TODO redo this shit
 		{
 
-			Dividers::ICreateSeparateChannels<uint8_t>* getSeparateChannels = Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk, GetChannelLenInBytes(), 3); //TODO delete
-			return getSeparateChannels->Run(); //TODO delete
+			Dividers::ICreateSeparateChannels<uint8_t>* getSeparateChannels = Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk, GetChannelLenInBytes(), 3); 
+			auto result = getSeparateChannels->Run();
+			delete getSeparateChannels;
+			return result; 
 
 			//if (canPixelTypesFitBuffer())
 			//{
