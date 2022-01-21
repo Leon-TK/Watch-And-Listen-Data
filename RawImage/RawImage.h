@@ -23,7 +23,7 @@ namespace WAL
 				Data() = delete;
 				Data(const uint32_t x, const uint32_t y) : x(x), y(y)
 				{
-					data = new PixelType[this->y][this->x]; //TODO x must be constant, find alternatives
+					data = new PixelType[x * y];
 				}
 
 				PixelType* data{ nullptr };
@@ -61,7 +61,7 @@ namespace WAL
 			bool canPutNextPixel();
 			void SetPixel(PixelType& pxl, uint32_t x, uint32_t y);
 			PixelType GetPixel(uint32_t x, uint32_t y);
-			void RestartNextPixel();
+			void RestartPutNextPixel();
 		};
 
 		template <typename PixelType>
@@ -123,15 +123,15 @@ namespace WAL
 		template<typename PixelType>
 		inline void TRawImage<PixelType>::SetPixel(PixelType& pxl, uint32_t x, uint32_t y)
 		{
-			data->data[y][x] = pxl;
+			data->data[x + y * this->x] = pxl;
 		}
 		template<typename PixelType>
 		inline PixelType TRawImage<PixelType>::GetPixel(uint32_t x, uint32_t y)
 		{
-			return data->data[y][x];
+			return data->data[x + y * this->x];
 		}
 		template<typename PixelType>
-		inline void TRawImage<PixelType>::RestartNextPixel()
+		inline void TRawImage<PixelType>::RestartPutNextPixel()
 		{
 			nextPxlX = 0;
 			nextPxlY = 0;
