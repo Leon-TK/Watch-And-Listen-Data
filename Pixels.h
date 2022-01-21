@@ -5,34 +5,34 @@ namespace WAL
 	namespace Pixels
 	{
 		template <typename ChannelType>
-		class TRgbPixel final
+		struct TRgbPixel final
 		{
 			WAL::Vectors::TVec3<ChannelType> channels;
 		};
 		template <typename ChannelType>
-		class TRgbaPixel final
+		struct TRgbaPixel final
 		{
 			WAL::Vectors::TVec3<ChannelType> channels;
 			ChannelType alpha;
 		};
 		template <typename ChannelType>
-		class TMonoPixel final
+		struct TMonoPixel final
 		{
 			ChannelType channel;
 		};
 
-		class RgbPixel final
+		struct RgbPixel final
 		{
 			WAL::Vectors::TVec3<uint8_t> channels;
 		};
 
-		class RgbaPixel final
+		struct RgbaPixel final
 		{
 			WAL::Vectors::TVec3<uint8_t> channels;
 			uint8_t alpha;
 		};
 
-		class MonoPixel final
+		struct MonoPixel final
 		{
 			uint8_t channel;
 		};
