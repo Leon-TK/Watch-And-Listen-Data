@@ -59,12 +59,12 @@ namespace WAL
 			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() override final
 			{
 				PixelExtractors::SeparateChannels<ChannelType>* channels = new PixelExtractors::SeparateChannels<ChannelType>();
-				int g = 0;
+				size_t g = 0;
 				for (int i = 0; i < this->componentLen; i++)
 				{
-					channels.RedValues.at(i) = this->pixelBytes.at(g);
-					channels.GreenValues.at(i) = this->pixelBytes.at(g + 1);
-					channels.BlueValues.at(i) = this->pixelBytes.at(g + 2);
+					channels->RedValues.at(i) = this->pixelBytes.at(g);
+					channels->GreenValues.at(i) = this->pixelBytes.at(g + 1);
+					channels->BlueValues.at(i) = this->pixelBytes.at(g + 2);
 					g += this->componentCount; //TODO
 				}
 				return channels;
@@ -118,7 +118,7 @@ namespace WAL
 			* 
 			* Converted fileBufferChunk.
 			*/
-			PixelVector* rawPixelBuffer;
+			PixelVector* rawPixelBuffer{nullptr}; //UNUSED
 
 			/**
 			* Returns row of pixels with lenght as output resolution.X. Ignores some rows be Y step
@@ -288,9 +288,11 @@ namespace WAL
 		inline SeparateChannels<uint8_t> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk) //TODO redo this shit
 		{
 
-			Dividers::ICreateSeparateChannels<uint8_t>* getSeparateChannels = Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk, GetChannelLenInBytes(), 3); 
-			auto result = getSeparateChannels->Run();
+			Dividers::ICreateSeparateChannels<uint8_t>* getSeparateChannels = new Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk.bytes, GetChannelLenInBytes(), 3); 
+			auto resultPtr = getSeparateChannels->Run();
+			auto result = *resultPtr;
 			delete getSeparateChannels;
+			delete resultPtr;
 			return result; 
 
 			//if (canPixelTypesFitBuffer())
@@ -338,9 +340,9 @@ namespace WAL
 			//~old
 
 			PixelType pixel;
-			pixel.channels.at(0) = R;
-			pixel.channels.at(1) = G;
-			pixel.channels.at(2) = B;
+			pixel.channels.x = R;
+			pixel.channels.y = G;
+			pixel.channels.z = B;
 
 			return pixel;
 		}
@@ -381,7 +383,9 @@ namespace WAL
 			}
 			else
 			{
+				//throw exeption
 				outIsNextPixelExist = false;
+				return PixelType();
 			}
 		
 		}

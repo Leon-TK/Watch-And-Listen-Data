@@ -25,6 +25,7 @@ namespace WAL
 		template<typename PixelType>
 		inline WAL::Images::Interface::IImage* RawToPngConverter_Impl<PixelType>::Convert(WAL::RawImages::TRawImage<PixelType>& rawImg)
 		{
+			return nullptr;
 		}
 	}
 	
