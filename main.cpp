@@ -3,7 +3,7 @@
 
 int main()
 {
-	WAL::IApp* app = new WAL::AppImplementations::AppImplementation();
+	WAL::Apps::Interface::IApp* app = new WAL::Apps::AppImplementation();
 	app->Init();
 	app->Run();
 	app->Shutdown();
