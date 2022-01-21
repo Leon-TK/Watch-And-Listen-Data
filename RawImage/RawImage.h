@@ -23,7 +23,7 @@ namespace WAL
 				Data() = delete;
 				Data(const uint32_t x, const uint32_t y) : x(x), y(y)
 				{
-					data = new PixelType[y][x];
+					data = new PixelType[this->y][this->x]; //TODO x must be constant, find alternatives
 				}
 
 				PixelType* data{ nullptr };
