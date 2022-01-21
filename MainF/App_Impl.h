@@ -56,7 +56,7 @@ namespace WAL
 	namespace Pixels
 	{
 		template <typename>
-		class TRgbPixel;
+		struct TRgbPixel;
 	};
 
 	namespace Apps
