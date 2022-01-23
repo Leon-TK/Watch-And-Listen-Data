@@ -5,10 +5,11 @@ namespace WAL
 {
 	namespace Vectors
 	{
-		struct Vec2;
+		template <typename>
+		struct TVec2;
 	}
 
-	typedef Vectors::Vec2 Resolution_t;
+	typedef Vectors::TVec2<uint16_t> Resolution_t;
 	typedef std::vector<uint8_t> ByteVector_t;
 
 }

@@ -61,7 +61,7 @@ namespace WAL
 	};
 	namespace RawImages
 	{
-		template <typename>
+		template <typename, typename>
 		class TRawImage;
 	}
 	namespace Apps
