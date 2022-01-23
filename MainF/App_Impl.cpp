@@ -55,7 +55,7 @@ namespace WAL::Apps
 
         const size_t fileChunkSize = this->CalculateFileChunkSize();
         const Resolution outputRes(1920, 1080);
-        auto pixelLenghtInBytes = CalculatePixelLenghtInBytes();
+        auto pixelLenghtInBytes = CalculatePixelLenghtInBytes(directoryRes, outputRes);
 
         //Raw rawImage
         RawImages::TRawImage<Pixel>* rawImage = CreateRawImage(outputRes); //TODO delete
@@ -82,11 +82,11 @@ namespace WAL::Apps
                 while (isNextPixelExist && isNextPuttable)
                 {
                     Pixel pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist);
-                    rawImage.PutNextPixel(pixel, isNextPuttable);
+                    rawImage->PutNextPixel(pixel, isNextPuttable);
                     delete this->pixelExtractor;
 
                     //rawImageConverter = new SomeConverter impl
-                    this->encoder->AddAsFrame(rawImageConverter->Convert(rawImage));
+                    this->encoder->AddAsFrame(rawImageConverter->Convert(*rawImage));
                 }
             }
             //TODO last unfilled chunk remain unhandled.

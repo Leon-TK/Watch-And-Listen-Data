@@ -58,7 +58,11 @@ namespace WAL
 		template <typename>
 		struct TRgbPixel;
 	};
-
+	namespace RawImages
+	{
+		template <typename>
+		class TRawImage;
+	}
 	namespace Apps
 	{
 		typedef uint8_t PixelChannelType;
