@@ -8,17 +8,20 @@ namespace WAL
 		struct TRgbPixel final
 		{
 			WAL::Vectors::TVec3<ChannelType> channels;
+			typedef ChannelType channelType;
 		};
 		template <typename ChannelType>
 		struct TRgbaPixel final
 		{
 			WAL::Vectors::TVec3<ChannelType> channels;
 			ChannelType alpha;
+			typedef ChannelType channelType;
 		};
 		template <typename ChannelType>
 		struct TMonoPixel final
 		{
 			ChannelType channel;
+			typedef ChannelType channelType;
 		};
 
 		struct RgbPixel final
