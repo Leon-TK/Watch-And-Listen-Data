@@ -12,14 +12,9 @@ namespace WAL
 {
 	namespace PixelExtractors
 	{
-		template <typename ChannelType>
-		struct SeparateChannels
-		{
-			std::vector<ChannelType> RedValues;
-			std::vector<ChannelType> GreenValues;
-			std::vector<ChannelType> BlueValues;
-		};
-	}
+		template <typename>
+		struct SeparateChannels;
+	};
 
 	namespace Dividers
 	{
@@ -73,6 +68,14 @@ namespace WAL
 	}
 	namespace PixelExtractors
 	{
+		template <typename ChannelType>
+		struct SeparateChannels
+		{
+			std::vector<ChannelType> RedValues;
+			std::vector<ChannelType> GreenValues;
+			std::vector<ChannelType> BlueValues;
+		};
+
 		typedef Vectors::Vec2 Resolution;
 		typedef std::vector<uint8_t> ByteVector;
 
@@ -166,6 +169,8 @@ namespace WAL
 			PixelType GetPixelFrom(SeparateChannels<typename PixelType::channelType>& separateChannels);
 
 		public:
+			typedef std::vector<PixelType> PixelVector;
+
 			PixelExtractor() = delete;
 			/*
 			* @param buffer Buffer to extract from
@@ -191,12 +196,12 @@ namespace WAL
 		}
 
 		template <typename PixelType>
-		inline std::vector<PixelType> PixelExtractor<PixelType>::ExtractRow(size_t step, size_t maxLen)
+		inline PixelExtractor<PixelType>::PixelVector PixelExtractor<PixelType>::ExtractRow(size_t step, size_t maxLen)
 		{
 		}
 
 		template <typename PixelType>
-		inline std::vector<PixelType> PixelExtractor<PixelType>::GetRow(size_t step, size_t maxLen)
+		inline PixelExtractor<PixelType>::PixelVector PixelExtractor<PixelType>::GetRow(size_t step, size_t maxLen)
 		{
 		}
 
