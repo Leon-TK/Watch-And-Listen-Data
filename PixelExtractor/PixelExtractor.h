@@ -132,21 +132,23 @@ namespace WAL
 			*/
 			bool canRowsFitToBuffer(size_t rowLen, size_t bufLen);
 
+			//TODO must return filled rows, for that you need to do right calculation with chunk size in getNextChunk filehandler
 			/**
-			* Returns nested rows in one 2D array. TODO must return filled rows, for that you need to do right calculation with chunk size in getNextChunk filehandler
+			* Returns nested rows in one 2D array. 
 			* @param step
 			* @param maxLen
 			*/
 			PixelVector ExtractRow(size_t step, size_t maxLen);
 
 			/*
-			* Returns bytes of size of one pixel. TODO create can get pixel bytes //2 TODO must track how much bytes was taken
+			* Returns bytes of size of one pixel. 
 			*/
 			PixelChunk GetNextPixelChunk(bool& outIsNextChunkExist);
 			bool isNextPixelChunkExist();
 
+			//TODO should move to pixel type definition? (Pixels.h)
 			/*
-			* Returns channels count of pixel type //TODO should move to pixel type definition? (Pixels.h)
+			* Returns channels count of pixel type 
 			*/
 			constexpr int GetPixelChannelsCount();
 

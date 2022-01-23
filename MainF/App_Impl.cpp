@@ -58,7 +58,7 @@ namespace WAL::Apps
         auto pixelLenghtInBytes = CalculatePixelLenghtInBytes(directoryRes, outputRes);
 
         //Raw rawImage
-        RawImages::TRawImage<Pixel, ResolutionType>* rawImage = CreateRawImage(outputRes); //TODO delete
+        RawImages::TRawImage<Pixel, ResolutionType>* rawImage = CreateRawImage(outputRes);
         
 
         //Loop through all files
@@ -75,7 +75,7 @@ namespace WAL::Apps
                 bool isFileChunkFull = true; // if not , do something...
                 auto currentFileChunk = this->chunkDispencer->GetNextChunk(fileChunkSize, isFileChunkFull, isNextFileChunkExist);
 
-                this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<Pixel>(&currentFileChunk, pixelLenghtInBytes);//TODO: delete ptr, TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
+                this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<Pixel>(&currentFileChunk, pixelLenghtInBytes);//TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
 
                 bool isNextPixelExist = true;
                 bool isNextPuttable = true;
@@ -92,6 +92,8 @@ namespace WAL::Apps
             //TODO last unfilled chunk remain unhandled.
             delete this->chunkDispencer;
         }
+
+        delete rawImage;
         //~Loop through all files
         
         //save video file
