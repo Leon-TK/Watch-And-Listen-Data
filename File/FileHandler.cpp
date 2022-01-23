@@ -9,7 +9,7 @@ namespace WAL::File
 {
     FileHandler::FileHandler(Interface::IFile* file, const size_t chunkSize) : file(file), chunkSize(chunkSize)
     {
-        this->fileChunkDispenser = new FileChunkDispencer(this->file->GetBuffer(), this->chunkSize); //TODO delete
+        this->fileChunkDispenser = new FileChunkDispencer(this->file->GetBuffer(), this->chunkSize); //dctor
     }
 
     FileHandler::~FileHandler()

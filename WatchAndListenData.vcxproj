@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="BufferHandler.h" />
     <ClInclude Include="ByteAssemble.h" />
+    <ClInclude Include="Exceptions.h" />
     <ClInclude Include="FileChunkDispencer.h" />
     <ClInclude Include="directory\IDirectory.h" />
     <ClInclude Include="directory\DirectoryHandler.h" />

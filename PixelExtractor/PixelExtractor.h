@@ -5,6 +5,7 @@
 #include "../Vectors/Vectors.h"
 #include "../Pixels.h"
 #include "../Typedefs.h"
+#include "../Exceptions.h"
 /*    
 * Helper for extract pixels from binary buffer. You must to use buffer chunks instead as full one for better perfomance
 */    
@@ -225,9 +226,7 @@ namespace WAL
 			}
 			else
 			{
-				//throw error
-				outIsNextChunkExist = false;
-				return PixelChunk(ByteVector_t(0));
+				throw Exceptions::NextNotExist();
 			}
 		}
 
@@ -307,8 +306,7 @@ namespace WAL
 
 			if (this->pixelSizeInBytes == 0)
 			{
-				outIsNextPixelExist = false;
-				return PixelType(); //TODO throw exception
+				throw Exceptions::NextNotExist();
 			}
 
 			if (canGetNextPixel())
@@ -326,9 +324,7 @@ namespace WAL
 			}
 			else
 			{
-				//throw exeption
-				outIsNextPixelExist = false;
-				return PixelType();
+				throw Exceptions::NextNotExist();
 			}
 		
 		}

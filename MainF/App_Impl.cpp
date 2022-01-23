@@ -14,6 +14,7 @@
 #include "../RawImage/RawToPngConverter_Impl.h"
 #include "../Vectors/Vectors.h"
 #include "../Math.h"
+#include "../Exceptions.h"
 
 namespace WAL::Apps
 {
@@ -139,12 +140,12 @@ namespace WAL::Apps
         Directory::DirectoryHandler dirHandle(this->dir);
         size_t dirSize = dirHandle.GetAllFilesSize();
         double aspectRatio =  Math::CalcAspectRatioFromLen(1.77, 2.0, dirSize, 0.001);
-        if (aspectRatio < 0) { throw std::exception(); } //TODO throw
+        if (aspectRatio < 0) { throw Exceptions::AspectRatioNotFound(); }
         return dirHandle.GetResolution(aspectRatio);
     }
     const Resolution_t AppImplementation::GetRawImageResolution(const Resolution_t& directoryRes)
     {
-
+        //
     }
 
     void AppImplementation::InitFileDispencer()
@@ -173,15 +174,16 @@ namespace WAL::Apps
         double aspectRatio = Math::CalcAspectRatioFromLen(1.77, 2.0, fileSize, 0.001);
         size_t size;
         size_t pixelCount;
-        if (fileSize % pixelBytesLen == 0) { pixelCount = fileSize / pixelBytesLen; } else { }; //throw
-        maxRam / 
-        if (fileSize < maxRam)
+        if (fileSize % pixelBytesLen == 0) { pixelCount = fileSize / pixelBytesLen; }
+        else { throw Exceptions::PixelsNotFit(); };
+        //maxRam / 
+        if (size > maxRam)
         {
-            //throw
+            throw Exceptions::ChunkExceedesRam();
         }
         if (size % pixelBytesLen != 0)
         {
-            //throw
+            throw Exceptions::PixelsNotFit();
         }
 
         return size;
