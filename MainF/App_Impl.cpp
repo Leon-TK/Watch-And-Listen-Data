@@ -21,93 +21,57 @@ namespace WAL::Apps
     }
     AppImplementation::~AppImplementation()
     {
-        delete this->dir;
-        delete this->encoder;
-        delete this->pixelExtractor;
-        delete this->chunkDispencer;
-        delete this->rawImageConverter;
-        delete this->fileDispencer;
+        delete dir;
+        delete encoder;
+        delete pixelExtractor;
+        delete chunkDispencer;
+        delete rawImageConverter;
+        delete fileDispencer;
+        delete runContext;
+        delete initContext;
     }
 
     void AppImplementation::Run()
     {
-        //extract one pixel, moprh to 1 rawImage, send rawImage to encoder, repeat until isNextPixel() is true
-        while (isNextPixel())
-        {
-            this->ExtractNextPixel();
-            this->SavePixel();
-            this->ConvertImage();
-            this->AddImageToEncoder();
-        }
-        std::string path = "C:\\Users\\leon2\\Desktop\\Garbage";
-        this->SaveVideoFile(path);
-
-        //OLD for each file extract enough pixels to fill one frame with defined resolution, then send it to encoder for handle it as one frame.
-    }
-
-    void AppImplementation::Init()
-    {
-        
-
-        InitDirectory();
-        
-        const Resolution_t directoryRes = GetDirectoryResolution();
-
-        InitFileDispencer();
-        //InitChunkDispencer();
-
-        const size_t fileChunkSize = this->CalculateFileChunkSize();
-        const Resolution_t outputRes(1920, 1080);
-        auto pixelLenghtInBytes = CalculatePixelLenghtInBytes(directoryRes, settings.outImageResolution);
-
-        //Raw rawImage
-        RawImages::TRawImage<Pixel, ResolutionType>* rawImage = CreateRawImage(settings.outImageResolution);
-        
-
         //Loop through all files
         bool isNextFileExist = true;
         while (isNextFileExist)
         {
             File::Interface::IFile* file = this->fileDispencer->GetNextFile(isNextFileExist);
-            this->chunkDispencer = new File::FileChunkDispencer(file->GetBuffer(), fileChunkSize);
+            this->chunkDispencer = new File::FileChunkDispencer(file->GetBuffer(), runContext->fileChunkSize);
 
-            
+
             bool isNextFileChunkExist = true;
             while (isNextFileChunkExist)// while isNextFileChunkExist
             {
-                bool isFileChunkFull = true; // if not , do something...
-                auto currentFileChunk = this->chunkDispencer->GetNextChunk(fileChunkSize, isFileChunkFull, isNextFileChunkExist);
+                bool isFileChunkFull = true; // TODO if not , do something...
+                auto currentFileChunk = this->chunkDispencer->GetNextChunk(runContext->fileChunkSize, isFileChunkFull, isNextFileChunkExist);
 
-                this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<Pixel>(&currentFileChunk, pixelLenghtInBytes);//TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
+                this->pixelExtractor = new WAL::PixelExtractors::PixelExtractor<Pixel>(&currentFileChunk, runContext->pixelLenghtInBytes);//TODO get next currentFileChunk return std vector but pixel extractor takes ifstream
 
                 bool isNextPixelExist = true;
                 bool isNextPuttable = true;
                 while (isNextPixelExist && isNextPuttable)
                 {
                     Pixel pixel = this->pixelExtractor->GetNextPixel(isNextPixelExist);
-                    rawImage->PutNextPixel(pixel, isNextPuttable);
+                    this->initContext->rawImage->PutNextPixel(pixel, isNextPuttable);
                     delete this->pixelExtractor;
 
                     //rawImageConverter = new SomeConverter impl
-                    this->encoder->AddAsFrame(rawImageConverter->Convert(*rawImage));
+                    this->encoder->AddAsFrame(rawImageConverter->Convert(*this->initContext->rawImage));
                 }
             }
             //TODO last unfilled chunk remain unhandled.
             delete this->chunkDispencer;
         }
 
-        delete rawImage;
         //~Loop through all files
-        
-        //save video file
-        this->encoder->SaveAsFile(this->settings.videoPath);
+    }
 
-        //Add rawImage to encoder
-
-        //Loop until no pixels
-
-        //save
-
+    void AppImplementation::Init()
+    {
+        SetupRunContext();
+        SetupInitContext();
     }
 
     void AppImplementation::Shutdown()
@@ -134,6 +98,23 @@ namespace WAL::Apps
 
     }
 
+    void AppImplementation::SetupRunContext()
+    {
+        RunContext* runContext = new RunContext(); //dctor
+        InitDirectory();
+        InitFileDispencer();
+        runContext->fileChunkSize = CalculateFileChunkSize();
+        runContext->pixelLenghtInBytes = CalculatePixelLenghtInBytes(GetDirectoryResolution(), settings.outImageResolution);
+        this->runContext = runContext;
+    }
+
+    void AppImplementation::SetupInitContext()
+    {
+        InitContext* initContext = new InitContext(); //dctor
+        initContext->rawImage = CreateRawImage(settings.outImageResolution);
+        this->initContext = initContext;
+    }
+
     void AppImplementation::AddImageToEncoder()
     {
         //this->encoder->AddAsFrame();
@@ -143,30 +124,26 @@ namespace WAL::Apps
     {
         if (!this->encoder) return;
         this->encoder->EncodeFrames();
-        this->encoder->SaveAsFile(path);
+        this->encoder->SaveAsFile(this->settings.videoPath);
     }
 
     void AppImplementation::InitDirectory()
     {
-        this->dir = new Directory::Directory_Impl(this->settings.directoryPath);
+        this->dir = new Directory::Directory_Impl(this->settings.directoryPath); //dctor
     }
 
     Resolution_t AppImplementation::GetDirectoryResolution()
     {
-        //Directory handler
         Directory::DirectoryHandler dirHandle(this->dir);
         size_t dirSize = dirHandle.GetAllFilesSize();
-        float aspectRatio = 16 / 9;
+        float aspectRatio = settings.outImageResolution.x / settings.outImageResolution.y;
         auto dirRes = dirHandle.GetResolution(aspectRatio);
-        Resolution_t res;
-        res.x = dirRes.x;
-        res.y = dirRes.y;
-        return res;
+        return Resolution_t(dirRes.x, dirRes.y);
     }
 
     void AppImplementation::InitFileDispencer()
     {
-        this->fileDispencer = new File::FileDispencer(this->dir->GetPaths());
+        this->fileDispencer = new File::FileDispencer(this->dir->GetPaths()); //dctor //TODO stack instead of heap
     }
 
     void AppImplementation::InitChunkDispencer()
@@ -176,12 +153,12 @@ namespace WAL::Apps
 
     void AppImplementation::InitEncoder()
     {
-        this->encoder = new Encoders::h256Encoder();
+        this->encoder = new Encoders::h256Encoder(); //dctor
     }
 
     void AppImplementation::InitRawImageConverter()
     {
-        this->rawImageConverter = new Converter::RawToPngConverter_Impl<Pixel>();
+        this->rawImageConverter = new Converter::RawToPngConverter_Impl<Pixel>(); //dctor
     }
     const size_t AppImplementation::CalculateFileChunkSize()
     {
@@ -191,8 +168,7 @@ namespace WAL::Apps
     }
     const size_t AppImplementation::CalculatePixelLenghtInBytes(const Resolution_t& directory, const Resolution_t& outputImage)
     {
-        auto res = (size_t)std::ceil((directory.x * directory.y) / (outputImage.x * outputImage.y)); //TODO ceil or what?
-        return res;
+        return (size_t)std::ceil((directory.x * directory.y) / (outputImage.x * outputImage.y)); //TODO ceil or what?
     }
     RawImages::TRawImage<AppImplementation::Pixel, ResolutionType>* AppImplementation::CreateRawImage(const Resolution_t& resolution)
     {

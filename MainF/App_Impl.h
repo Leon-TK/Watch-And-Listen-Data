@@ -70,6 +70,11 @@ namespace WAL
 
 		class AppImplementation final : public Interface::IApp
 		{
+
+		public:
+			typedef uint8_t PixelChannelType;
+			typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
+
 		public:
 			struct AppSettings
 			{
@@ -78,25 +83,38 @@ namespace WAL
 							const Resolution_t outImageResolution) :
 				directoryPath(directoryPath), videoPath(videoPath), outImageResolution(outImageResolution) {};
 
-				const std::string directoryPath;
+				const std::string directoryPath; 
 				const std::string videoPath;
 				const Resolution_t outImageResolution;
 			};
 		private:
-			typedef uint8_t PixelChannelType;
-			typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
+			struct RunContext
+			{
+				size_t fileChunkSize;
+				size_t pixelLenghtInBytes;
+			};
+			struct InitContext
+			{
+				~InitContext() { delete rawImage; }
+				RawImages::TRawImage<typename AppImplementation::Pixel, ResolutionType>* rawImage;
+			};
 
 		private:
-			Directory::Interface::IDirectory* dir{ nullptr };
-			Encoders::Interface::IVideoEncoder* encoder{ nullptr };
-			PixelExtractors::PixelExtractor<Pixel>* pixelExtractor{ nullptr };
-			File::FileDispencer* fileDispencer{ nullptr };
-			File::FileChunkDispencer* chunkDispencer{ nullptr };
-			Converter::Interface::IRawImageConverter<Pixel>* rawImageConverter{ nullptr };
+			Directory::Interface::IDirectory* dir = nullptr;
+			Encoders::Interface::IVideoEncoder* encoder = nullptr;
+			PixelExtractors::PixelExtractor<Pixel>* pixelExtractor = nullptr;
+			File::FileDispencer* fileDispencer = nullptr;
+			File::FileChunkDispencer* chunkDispencer = nullptr;
+			Converter::Interface::IRawImageConverter<Pixel>* rawImageConverter = nullptr;
+
 		private:
-			
-			AppSettings settings;
+			AppSettings settings; //ctor init
+			const RunContext* runContext = nullptr;
+			const InitContext* initContext = nullptr;
+
 		private:
+			void SetupRunContext();
+			void SetupInitContext();
 			/**
 			* Checks if next pixel exist
 			*/
@@ -137,17 +155,14 @@ namespace WAL
 			RawImages::TRawImage<Pixel, ResolutionType>* CreateRawImage(const Resolution_t& resolution);
 
 		public:
-			typedef uint8_t PixelChannelType;
-			typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
-
 			AppImplementation(const AppSettings& settings);
 			~AppImplementation();
 			/**
 			* Extract all pixels to video step by step, frame by frame
 			*/
-			virtual void Run() override;
-			virtual void Init() override;
-			virtual void Shutdown() override;
+			virtual void Run() override final;
+			virtual void Init() override final;
+			virtual void Shutdown() override final;
 
 		};
 	};
