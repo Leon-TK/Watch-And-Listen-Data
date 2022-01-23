@@ -18,12 +18,12 @@ namespace WAL
 		public:
 
 			RawToPngConverter_Impl() = default;
-			virtual WAL::Images::Interface::IImage* Convert(WAL::RawImages::TRawImage<PixelType>& rawImg) override final;
+			virtual WAL::Images::Interface::IImage* Convert(WAL::RawImages::TRawImage<PixelType, ResolutionType>& rawImg) override final;
 
 		};
 
 		template<typename PixelType>
-		inline WAL::Images::Interface::IImage* RawToPngConverter_Impl<PixelType>::Convert(WAL::RawImages::TRawImage<PixelType>& rawImg)
+		inline WAL::Images::Interface::IImage* RawToPngConverter_Impl<PixelType>::Convert(WAL::RawImages::TRawImage<PixelType, ResolutionType>& rawImg)
 		{
 			return nullptr;
 		}

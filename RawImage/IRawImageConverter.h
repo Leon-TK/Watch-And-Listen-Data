@@ -14,7 +14,7 @@ namespace WAL
 	}
 	namespace RawImages
 	{
-		template<typename PixelType>
+		template<typename, typename>
 		class TRawImage;
 	}
 
@@ -27,7 +27,7 @@ namespace WAL
 			{
 			public:
 				virtual ~IRawImageConverter() {};
-				virtual WAL::Images::Interface::IImage* Convert(WAL::RawImages::TRawImage<PixelType>& rawImg) = 0;
+				virtual WAL::Images::Interface::IImage* Convert(WAL::RawImages::TRawImage<PixelType, ResolutionType>& rawImg) = 0;
 
 			};
 		}

@@ -27,7 +27,7 @@ namespace WAL
 				}
 				const ResolutionType x; //TODO must be unsigned
 				const ResolutionType y; //TODO must be unsigned
-
+				friend TRawImage<PixelType, ResolutionType>;
 			private:
 				PixelType* data = nullptr;
 			};

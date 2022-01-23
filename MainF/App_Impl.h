@@ -118,7 +118,7 @@ namespace WAL
 
 			const size_t CalculateFileChunkSize();
 			const size_t CalculatePixelLenghtInBytes(const Resolution_t& directory, const Resolution_t& outputImage);
-			RawImages::TRawImage<Pixel>* CreateRawImage(const Resolution_t& resolution);
+			RawImages::TRawImage<Pixel, ResolutionType>* CreateRawImage(const Resolution_t& resolution);
 
 		public:
 			typedef uint8_t PixelChannelType;

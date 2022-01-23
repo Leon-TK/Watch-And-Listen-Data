@@ -58,7 +58,7 @@ namespace WAL::Apps
         auto pixelLenghtInBytes = CalculatePixelLenghtInBytes(directoryRes, outputRes);
 
         //Raw rawImage
-        RawImages::TRawImage<Pixel>* rawImage = CreateRawImage(outputRes); //TODO delete
+        RawImages::TRawImage<Pixel, ResolutionType>* rawImage = CreateRawImage(outputRes); //TODO delete
         
 
         //Loop through all files
@@ -191,8 +191,8 @@ namespace WAL::Apps
         auto res = (size_t)std::ceil((directory.x * directory.y) / (outputImage.x * outputImage.y)); //TODO ceil or what?
         return res;
     }
-    RawImages::TRawImage<AppImplementation::Pixel>* AppImplementation::CreateRawImage(const Resolution_t& resolution)
+    RawImages::TRawImage<AppImplementation::Pixel, ResolutionType>* AppImplementation::CreateRawImage(const Resolution_t& resolution)
     {
-        return new RawImages::TRawImage<Pixel>(resolution.x, resolution.x); //TODO raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
+        return new RawImages::TRawImage<Pixel, ResolutionType>(resolution.x, resolution.x); //TODO raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
     }
 }
