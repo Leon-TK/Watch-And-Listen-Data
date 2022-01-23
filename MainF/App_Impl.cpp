@@ -13,6 +13,7 @@
 #include "../RawImage/IRawImageConverter.h"
 #include "../RawImage/RawToPngConverter_Impl.h"
 #include "../Vectors/Vectors.h"
+#include "../Math.h"
 
 namespace WAL::Apps
 {
@@ -136,7 +137,7 @@ namespace WAL::Apps
     {
         Directory::DirectoryHandler dirHandle(this->dir);
         size_t dirSize = dirHandle.GetAllFilesSize();
-        float aspectRatio = settings.outImageResolution.x / settings.outImageResolution.y;
+        double aspectRatio =  Math::CalcAspectRatioFromLen(1.77, 2.0, dirSize, 0.001);
         auto dirRes = dirHandle.GetResolution(aspectRatio);
         return Resolution_t(dirRes.x, dirRes.y);
     }
@@ -164,6 +165,7 @@ namespace WAL::Apps
     {
         //TODO
         //< fileSize, % pixelBytes, !> 1 GB
+        double aspectRatio = Math::CalcAspectRatioFromLen(1.77, 2.0, fileSize, 0.001);
         size_t size;
         size_t pixelCount;
         if (fileSize % pixelBytesLen == 0) { pixelCount = fileSize / pixelBytesLen; } else { }; //throw

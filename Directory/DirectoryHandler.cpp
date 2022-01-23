@@ -5,6 +5,7 @@
 #include "IDirectory.h"
 #include <cmath>
 #include "../Vectors/Vectors.h"
+#include "../Math.h"
 
 namespace WAL::Directory
 {
@@ -37,15 +38,7 @@ namespace WAL::Directory
     Vectors::TVec2<uint16_t> DirectoryHandler::GetResolution(float aspectRatio) const
     {
         size_t dirSize = this->GetAllFilesSize();
-        float x;
-        float y;
-
-        y = std::sqrt(dirSize / aspectRatio);
-        x = aspectRatio * y;
-
-        //TODO ceil or floor x and y for not missing data
-        Vectors::TVec2<uint16_t> res((uint16_t)x, (uint16_t)y);
-
+        auto res = Math::CalcResolution<Vectors::TVec2<uint16_t>>(aspectRatio, dirSize);
         return res;
     }
 
