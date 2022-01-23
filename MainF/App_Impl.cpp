@@ -160,11 +160,23 @@ namespace WAL::Apps
     {
         this->rawImageConverter = new Converter::RawToPngConverter_Impl<Pixel>(); //dctor
     }
-    const size_t AppImplementation::CalculateFileChunkSize()
+    const size_t AppImplementation::CalculateFileChunkSize(const size_t fileSize, const size_t pixelBytesLen, const size_t maxRam)
     {
         //TODO
         //< fileSize, % pixelBytes, !> 1 GB
-        return size_t();
+        size_t size;
+        size_t pixelCount;
+        if (fileSize % pixelBytesLen == 0) { pixelCount = fileSize / pixelBytesLen; } else { }; //throw
+        if (fileSize < maxRam)
+        {
+            //throw
+        }
+        if (size % pixelBytesLen != 0)
+        {
+            //throw
+        }
+
+        return size;
     }
     const size_t AppImplementation::CalculatePixelLenghtInBytes(const Resolution_t& directory, const Resolution_t& outputImage)
     {
