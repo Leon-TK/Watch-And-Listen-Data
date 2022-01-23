@@ -5,17 +5,9 @@
 namespace WAL::Directory
 {
 
-    Directory_Impl::Directory_Impl(std::string& path)
+    Directory_Impl::Directory_Impl(const std::string& path): root(path)
     {
-        this->Open(path);
     };
-
-
-    const std::vector<std::string> Directory_Impl::Open(std::string& path)
-    {
-        this->root = path;
-        return this->GetPaths();
-    }
 
     const std::vector<std::string> Directory_Impl::GetPaths() const
     {

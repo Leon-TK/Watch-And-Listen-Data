@@ -11,7 +11,6 @@ namespace WAL
 			{
 			public:
 				virtual ~IDirectory() {};
-				virtual const std::vector<std::string> Open(std::string& path) = 0;
 				/**
 				* returns paths of all files. Dirs are not included
 				*/

@@ -16,6 +16,9 @@
 
 namespace WAL::Apps
 {
+    AppImplementation::AppImplementation(const AppSettings& settings): settings(settings)
+    {
+    }
     AppImplementation::~AppImplementation()
     {
         delete this->dir;
@@ -55,10 +58,10 @@ namespace WAL::Apps
 
         const size_t fileChunkSize = this->CalculateFileChunkSize();
         const Resolution_t outputRes(1920, 1080);
-        auto pixelLenghtInBytes = CalculatePixelLenghtInBytes(directoryRes, outputRes);
+        auto pixelLenghtInBytes = CalculatePixelLenghtInBytes(directoryRes, settings.outImageResolution);
 
         //Raw rawImage
-        RawImages::TRawImage<Pixel, ResolutionType>* rawImage = CreateRawImage(outputRes);
+        RawImages::TRawImage<Pixel, ResolutionType>* rawImage = CreateRawImage(settings.outImageResolution);
         
 
         //Loop through all files
@@ -97,8 +100,7 @@ namespace WAL::Apps
         //~Loop through all files
         
         //save video file
-        std::string outputPath = "C:\\Users\\leon2\\Desktop\\Garbage";
-        this->encoder->SaveAsFile(outputPath);
+        this->encoder->SaveAsFile(this->settings.videoPath);
 
         //Add rawImage to encoder
 
@@ -146,8 +148,7 @@ namespace WAL::Apps
 
     void AppImplementation::InitDirectory()
     {
-        std::string path = "C:\\Users\\leon2\\Desktop\\Garbage";
-        this->dir = new Directory::Directory_Impl(path);
+        this->dir = new Directory::Directory_Impl(this->settings.directoryPath);
     }
 
     Resolution_t AppImplementation::GetDirectoryResolution()

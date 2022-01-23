@@ -4,7 +4,7 @@
 
 namespace WAL::Encoders
 {
-    void h256Encoder::SaveAsFile(std::string& path)
+    void h256Encoder::SaveAsFile(const std::string& path)
     {
 
     }

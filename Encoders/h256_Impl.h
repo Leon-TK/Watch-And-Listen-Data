@@ -23,7 +23,7 @@ namespace WAL
 			* Saves encoded video. Encoding must be done before
 			* @param path
 			*/
-			void SaveAsFile(std::string& path);
+			void SaveAsFile(const std::string& path);
 
 			/**
 			* Adds image as frame

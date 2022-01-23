@@ -12,12 +12,10 @@ namespace WAL
 		class Directory_Impl final : public Interface::IDirectory
 		{
 		private:
-			std::string root;
+			const std::string root;
 		public:
 			Directory_Impl() = delete;
-			Directory_Impl(std::string& path);
-
-			virtual const std::vector<std::string> Open(std::string& path) override;
+			Directory_Impl(const std::string& path);
 
 			/**
 			* returns paths of all files. Dirs are not included

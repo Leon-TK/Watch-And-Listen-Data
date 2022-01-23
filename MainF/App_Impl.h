@@ -70,17 +70,33 @@ namespace WAL
 
 		class AppImplementation final : public Interface::IApp
 		{
+		public:
+			struct AppSettings
+			{
+				AppSettings(const std::string directoryPath,
+							const std::string videoPath,
+							const Resolution_t outImageResolution) :
+				directoryPath(directoryPath), videoPath(videoPath), outImageResolution(outImageResolution) {};
+
+				const std::string directoryPath;
+				const std::string videoPath;
+				const Resolution_t outImageResolution;
+			};
 		private:
 			typedef uint8_t PixelChannelType;
 			typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
 
+		private:
 			Directory::Interface::IDirectory* dir{ nullptr };
 			Encoders::Interface::IVideoEncoder* encoder{ nullptr };
 			PixelExtractors::PixelExtractor<Pixel>* pixelExtractor{ nullptr };
 			File::FileDispencer* fileDispencer{ nullptr };
 			File::FileChunkDispencer* chunkDispencer{ nullptr };
 			Converter::Interface::IRawImageConverter<Pixel>* rawImageConverter{ nullptr };
-
+		private:
+			
+			AppSettings settings;
+		private:
 			/**
 			* Checks if next pixel exist
 			*/
@@ -124,7 +140,7 @@ namespace WAL
 			typedef uint8_t PixelChannelType;
 			typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
 
-			AppImplementation() = default;
+			AppImplementation(const AppSettings& settings);
 			~AppImplementation();
 			/**
 			* Extract all pixels to video step by step, frame by frame
