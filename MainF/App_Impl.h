@@ -59,7 +59,11 @@ namespace WAL
 		template <typename>
 		struct TRgbPixel;
 	};
-
+	namespace RawImages
+	{
+		template <typename>
+		class TRawImage;
+	}
 	namespace Apps
 	{
 		
@@ -111,6 +115,10 @@ namespace WAL
 			void InitChunkDispencer();
 			void InitEncoder();
 			void InitRawImageConverter();
+
+			const size_t CalculateFileChunkSize();
+			const size_t CalculatePixelLenghtInBytes(const Resolution_t& directory, const Resolution_t& outputImage);
+			RawImages::TRawImage<Pixel>* CreateRawImage(const Resolution_t& resolution);
 
 		public:
 			typedef uint8_t PixelChannelType;
