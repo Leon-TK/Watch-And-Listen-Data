@@ -9,7 +9,7 @@
 * Helper for extract pixels from binary buffer. You must to use buffer chunks instead as full one for better perfomance
 */    
 namespace WAL
-{ //Hello
+{
 	namespace PixelExtractors
 	{
 		template <typename ChannelType>
@@ -247,43 +247,14 @@ namespace WAL
 		}
 
 		template<typename PixelType>
-		inline PixelType PixelExtractor<PixelType>::ConvertPixelChunkToPixel(PixelChunk& pixelChunk) //TODO redo this shit
+		inline PixelType PixelExtractor<PixelType>::ConvertPixelChunkToPixel(PixelChunk& pixelChunk)
 		{
 			SeparateChannels channels = ConvertPixelChunkToChannels(pixelChunk);
 			return this->GetPixelFrom(channels);
-	
-
-			////old
-			//if (canPixelTypesFitBuffer())
-			//{
-			//	PixelVector pixels;
-			//	const auto pixelCount = fileBufferChunk->size() / sizeof(PixelType);
-
-			//	//convert group of bytes to pixels
-			//	for (int i = 0; i < pixelCount; i++)
-			//	{
-			//		std::array<uint8_t, sizeof(PixelType)> RawPixel;
-			//		int g = 0;
-			//		for (int j = 0; j < sizeof(PixelType); j++)
-			//		{
-			//			RawPixel[j] = fileBufferChunk->at(g + j);
-			//			g += sizeof(PixelType);
-			//		}
-			//		auto pixel = ByteAssemble::GlueBytesToChannel<PixelType>(RawPixel);
-			//		pixels.push_back(pixel);
-			//	}
-
-			//	return pixels;
-			//}
-			//else
-			//{
-			//	return PixelVector(0);
-			//}
-			////~old
 
 		}
 		template<typename PixelType>
-		inline SeparateChannels<typename PixelType::channelType> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk) //TODO redo this shit
+		inline SeparateChannels<typename PixelType::channelType> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk)
 		{
 
 			Dividers::ICreateSeparateChannels<typename PixelType::channelType>* getSeparateChannels = new Dividers::AlternatingDivideForAverage<typename PixelType::channelType>(pixelChunk.bytes, GetChannelLenInBytes(), 3);
@@ -292,32 +263,6 @@ namespace WAL
 			delete getSeparateChannels;
 			delete resultPtr;
 			return result; 
-
-			//if (canPixelTypesFitBuffer())
-			//{
-			//	PixelVector pixels;
-			//	const auto pixelCount = fileBufferChunk->size() / sizeof(PixelType);
-
-			//	//convert group of bytes to pixels
-			//	for (int i = 0; i < pixelCount; i++)
-			//	{
-			//		std::array<uint8_t, sizeof(PixelType)> RawPixel;
-			//		int g = 0;
-			//		for (int j = 0; j < sizeof(PixelType); j++)
-			//		{
-			//			RawPixel[j] = fileBufferChunk->at(g + j);
-			//			g += sizeof(PixelType);
-			//		}
-			//		auto pixel = ByteAssemble::GlueBytesToChannel<PixelType>(RawPixel);
-			//		pixels.push_back(pixel);
-			//	}
-
-			//	return pixels;
-			//}
-			//else
-			//{
-			//	return PixelVector(0);
-			//}
 
 		}
 
@@ -330,12 +275,9 @@ namespace WAL
 		template<typename PixelType>
 		inline PixelType PixelExtractor<PixelType>::GetPixelFrom(SeparateChannels<typename PixelType::channelType>& separateChannels)
 		{
-
-			//old
-			typename PixelType::channelType R = ByteAssemble::GetAverageFrom<typename PixelType::channelType>(separateChannels.RedValues, GetChannelLenInBytes()); //TODO channeltype instead of pixeltype
+			typename PixelType::channelType R = ByteAssemble::GetAverageFrom<typename PixelType::channelType>(separateChannels.RedValues, GetChannelLenInBytes());
 			typename PixelType::channelType G = ByteAssemble::GetAverageFrom<typename PixelType::channelType>(separateChannels.GreenValues, GetChannelLenInBytes());
 			typename PixelType::channelType B = ByteAssemble::GetAverageFrom<typename PixelType::channelType>(separateChannels.BlueValues, GetChannelLenInBytes());
-			//~old
 
 			PixelType pixel;
 			pixel.channels.x = R;
@@ -363,7 +305,7 @@ namespace WAL
 			if (this->pixelSizeInBytes == 0)
 			{
 				outIsNextPixelExist = false;
-				return PixelType(); //TODO through exception
+				return PixelType(); //TODO throw exception
 			}
 
 			if (canGetNextPixel())
