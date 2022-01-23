@@ -160,7 +160,7 @@ namespace WAL
 			size_t GetChannelLenInBytes();
 
 			PixelType ConvertPixelChunkToPixel(PixelChunk& pixelChunk);
-			SeparateChannels<typename PixelType::channelType> ConvertPixelChunkToChannels(PixelChunk& pixelChunk); //TODO uint8_t must be user defined ChannelType 
+			SeparateChannels<typename PixelType::channelType> ConvertPixelChunkToChannels(PixelChunk& pixelChunk);
 			/*
 			* True if pixel types fit file buffer chunk, i.e. no more no less
 			*/
