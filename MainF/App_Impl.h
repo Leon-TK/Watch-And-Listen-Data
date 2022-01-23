@@ -67,7 +67,6 @@ namespace WAL
 	{
 		typedef uint8_t PixelChannelType;
 		typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
-		typedef Vectors::TVec2<uint32_t> Resolution;
 
 		class AppImplementation final : public Interface::IApp
 		{
@@ -109,15 +108,15 @@ namespace WAL
 			//std::ifstream* GetFileBuffer();
 
 			void InitDirectory();
-			Resolution GetDirectoryResolution();
+			Resolution_t GetDirectoryResolution();
 			void InitFileDispencer();
 			void InitChunkDispencer();
 			void InitEncoder();
 			void InitRawImageConverter();
 
 			const size_t CalculateFileChunkSize();
-			const size_t CalculatePixelLenghtInBytes(const Resolution& directory, const Resolution& outputImage);
-			RawImages::TRawImage<Pixel>* CreateRawImage(const Resolution& resolution);
+			const size_t CalculatePixelLenghtInBytes(const Resolution_t& directory, const Resolution_t& outputImage);
+			RawImages::TRawImage<Pixel>* CreateRawImage(const Resolution_t& resolution);
 
 		public:
 
