@@ -48,13 +48,13 @@ namespace WAL::Apps
 
         InitDirectory();
         
-        const Resolution directoryRes = GetDirectoryResolution();
+        const Resolution_t directoryRes = GetDirectoryResolution();
 
         InitFileDispencer();
         //InitChunkDispencer();
 
         const size_t fileChunkSize = this->CalculateFileChunkSize();
-        const Resolution outputRes(1920, 1080);
+        const Resolution_t outputRes(1920, 1080);
         auto pixelLenghtInBytes = CalculatePixelLenghtInBytes(directoryRes, outputRes);
 
         //Raw rawImage
@@ -148,14 +148,14 @@ namespace WAL::Apps
         this->dir = new Directory::Directory_Impl(path);
     }
 
-    Resolution AppImplementation::GetDirectoryResolution()
+    Resolution_t AppImplementation::GetDirectoryResolution()
     {
         //Directory handler
         Directory::DirectoryHandler dirHandle(this->dir);
         size_t dirSize = dirHandle.GetAllFilesSize();
         float aspectRatio = 16 / 9;
         auto dirRes = dirHandle.GetResolution(aspectRatio);
-        Resolution res;
+        Resolution_t res;
         res.x = dirRes.x;
         res.y = dirRes.y;
         return res;
@@ -186,12 +186,12 @@ namespace WAL::Apps
         //< fileSize, % pixelBytes, !> 1 GB
         return size_t();
     }
-    const size_t AppImplementation::CalculatePixelLenghtInBytes(const Resolution& directory, const Resolution& outputImage)
+    const size_t AppImplementation::CalculatePixelLenghtInBytes(const Resolution_t& directory, const Resolution_t& outputImage)
     {
         auto res = (size_t)std::ceil((directory.x * directory.y) / (outputImage.x * outputImage.y)); //TODO ceil or what?
         return res;
     }
-    RawImages::TRawImage<Pixel>* AppImplementation::CreateRawImage(const Resolution& resolution)
+    RawImages::TRawImage<Pixel>* AppImplementation::CreateRawImage(const Resolution_t& resolution)
     {
         return new RawImages::TRawImage<Pixel>(resolution.x, resolution.x); //TODO raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
     }
