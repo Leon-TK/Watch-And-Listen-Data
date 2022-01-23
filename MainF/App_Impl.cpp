@@ -167,6 +167,7 @@ namespace WAL::Apps
         size_t size;
         size_t pixelCount;
         if (fileSize % pixelBytesLen == 0) { pixelCount = fileSize / pixelBytesLen; } else { }; //throw
+        maxRam / 
         if (fileSize < maxRam)
         {
             //throw
@@ -180,6 +181,8 @@ namespace WAL::Apps
     }
     const size_t AppImplementation::CalculatePixelLenghtInBytes(const Resolution_t& directory, const Resolution_t& outputImage)
     {
+        // Need integer len. not float
+        // If float had got - floor result, directory - result * outputImage, this is how much bytes are left from all dir.
         return (size_t)std::ceil((directory.x * directory.y) / (outputImage.x * outputImage.y)); //TODO ceil or what?
     }
     RawImages::TRawImage<AppImplementation::Pixel, ResolutionType>* AppImplementation::CreateRawImage(const Resolution_t& resolution)

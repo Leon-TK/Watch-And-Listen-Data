@@ -18,6 +18,8 @@ namespace WAL
 			{
 				return TVec2(rhs.x, rhs.y);
 			}
+
+			typedef T type;
 		};
 		template<typename T>
 		struct TVec3
@@ -32,6 +34,8 @@ namespace WAL
 			{
 				return TVec3(rhs.x, rhs.y, rhs.z);
 			}
+
+			typedef T type;
 		};
 
 		struct Vec2
