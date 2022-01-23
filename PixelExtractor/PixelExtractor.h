@@ -4,7 +4,7 @@
 #include "../ByteAssemble.h"
 #include "../Vectors/Vectors.h"
 #include "../Pixels.h"
-
+#include "../Typedefs.h"
 /*    
 * Helper for extract pixels from binary buffer. You must to use buffer chunks instead as full one for better perfomance
 */    
@@ -18,7 +18,6 @@ namespace WAL
 
 	namespace Dividers
 	{
-		typedef std::vector<uint8_t> ByteVector;
 
 		template <typename ChannelType>
 		class ICreateSeparateChannels
@@ -43,12 +42,12 @@ namespace WAL
 		class AlternatingDivideForAverage final : public ICreateSeparateChannels<ChannelType>
 		{
 		private:
-			const ByteVector& pixelBytes;
+			const ByteVector_t& pixelBytes;
 			const size_t componentLen;
 			const size_t componentCount;
 
 		public:
-			AlternatingDivideForAverage(const ByteVector& pixelBytes, const size_t componentLen, const size_t componentCount)
+			AlternatingDivideForAverage(const ByteVector_t& pixelBytes, const size_t componentLen, const size_t componentCount)
 		    :componentCount(componentCount), pixelBytes(pixelBytes), componentLen(componentLen) {};
 
 			virtual PixelExtractors::SeparateChannels<ChannelType>* Run() override final
@@ -76,16 +75,13 @@ namespace WAL
 			std::vector<ChannelType> BlueValues;
 		};
 
-		typedef Vectors::Vec2 Resolution;
-		typedef std::vector<uint8_t> ByteVector;
-
 		/*
 		* It's chunk of bytes that must be converted to Pixel
 		*/
 		struct PixelChunk
 		{
-			ByteVector bytes;
-			PixelChunk(ByteVector bytes) : bytes(bytes) {};
+			ByteVector_t bytes;
+			PixelChunk(ByteVector_t bytes) : bytes(bytes) {};
 			PixelChunk() = delete;
 		};
 
@@ -112,7 +108,7 @@ namespace WAL
 			* It will be converted to pixel vector
 			* You can change buffer to new chunk by setbuffer()
 			*/
-			ByteVector* fileBufferChunk;
+			ByteVector_t* fileBufferChunk;
 
 			/*
 			* Vector to extract pixels from.
@@ -176,9 +172,9 @@ namespace WAL
 			* @param buffer Buffer to extract from
 			* @param pixelSizeInBytes How much one pixel takes bytes
 			*/
-			PixelExtractor(ByteVector* fileBufferChunk, const size_t pixelSizeInBytes);
+			PixelExtractor(ByteVector_t* fileBufferChunk, const size_t pixelSizeInBytes);
 
-			void SetNewBuffer(ByteVector* fileBufferChunk);
+			void SetNewBuffer(ByteVector_t* fileBufferChunk);
 
 			/*
 			* Returns pixel while end of buffer is not reached
@@ -191,7 +187,7 @@ namespace WAL
 		};
 
 		template<typename PixelType>
-		inline PixelExtractor<PixelType>::PixelExtractor(ByteVector* fileBufferChunk, const size_t pixelSizeInBytes) : fileBufferChunk(fileBufferChunk)
+		inline PixelExtractor<PixelType>::PixelExtractor(ByteVector_t* fileBufferChunk, const size_t pixelSizeInBytes) : fileBufferChunk(fileBufferChunk)
 		{
 		}
 
@@ -216,7 +212,7 @@ namespace WAL
 		{
 			if (isNextPixelChunkExist())
 			{
-				ByteVector vec(pixelSizeInBytes);
+				ByteVector_t vec(pixelSizeInBytes);
 				for (int i = 0; i < pixelSizeInBytes; i++)
 				{
 					vec.at(i) = fileBufferChunk->at(i); //TODO get bext ...
@@ -229,7 +225,7 @@ namespace WAL
 			{
 				//throw error
 				outIsNextChunkExist = false;
-				return PixelChunk(ByteVector(0));
+				return PixelChunk(ByteVector_t(0));
 			}
 		}
 
@@ -293,7 +289,7 @@ namespace WAL
 		}
 
 		template<typename PixelType>
-		inline void PixelExtractor<PixelType>::SetNewBuffer(ByteVector* fileBufferChunk)
+		inline void PixelExtractor<PixelType>::SetNewBuffer(ByteVector_t* fileBufferChunk)
 		{
 			this->fileBufferChunk = fileBufferChunk;
 		}

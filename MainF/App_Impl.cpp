@@ -48,13 +48,13 @@ namespace WAL::Apps
 
         InitDirectory();
         
-        const Resolution directoryRes = GetDirectoryResolution();
+        const Resolution_t directoryRes = GetDirectoryResolution();
 
         InitFileDispencer();
         //InitChunkDispencer();
 
         constexpr size_t fileChunkSize = 2000;
-        const Resolution outputRes(1920, 1080);
+        const Resolution_t outputRes(1920, 1080);
         auto pixelLenghtInBytes = (size_t)std::ceil((directoryRes.x * directoryRes.y) / (outputRes.x * outputRes.y)); //TODO ceil or what?
 
         //Raw rawImage
@@ -139,14 +139,14 @@ namespace WAL::Apps
         this->dir = new Directory::Directory_Impl(path);
     }
 
-    Resolution AppImplementation::GetDirectoryResolution()
+    Resolution_t AppImplementation::GetDirectoryResolution()
     {
         //Directory handler
         Directory::DirectoryHandler dirHandle(this->dir);
         size_t dirSize = dirHandle.GetAllFilesSize();
         float aspectRatio = 16 / 9;
         auto dirRes = dirHandle.GetResolution(aspectRatio);
-        Resolution res;
+        Resolution_t res;
         res.x = dirRes.x;
         res.y = dirRes.y;
         return res;

@@ -2,6 +2,7 @@
 #include "IApp.h"
 #include <fstream>
 #include <string>
+#include "../Typedefs.h"
 //#include "../Vectors/Vectors.h"
 /*    
 * Test implementaion
@@ -61,13 +62,13 @@ namespace WAL
 
 	namespace Apps
 	{
-		typedef uint8_t PixelChannelType;
-		typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
-		typedef Vectors::TVec2<uint32_t> Resolution;
+		
 
 		class AppImplementation final : public Interface::IApp
 		{
 		private:
+			typedef uint8_t PixelChannelType;
+			typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
 
 			Directory::Interface::IDirectory* dir{ nullptr };
 			Encoders::Interface::IVideoEncoder* encoder{ nullptr };
@@ -105,14 +106,15 @@ namespace WAL
 			//std::ifstream* GetFileBuffer();
 
 			void InitDirectory();
-			Resolution GetDirectoryResolution();
+			Resolution_t GetDirectoryResolution();
 			void InitFileDispencer();
 			void InitChunkDispencer();
 			void InitEncoder();
 			void InitRawImageConverter();
 
 		public:
-
+			typedef uint8_t PixelChannelType;
+			typedef Pixels::TRgbPixel<PixelChannelType> Pixel;
 
 			AppImplementation() = default;
 			~AppImplementation();

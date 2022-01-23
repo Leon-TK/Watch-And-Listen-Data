@@ -134,5 +134,8 @@
     <ClInclude Include="Pixels.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Typedefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
