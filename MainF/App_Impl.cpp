@@ -195,6 +195,6 @@ namespace WAL::Apps
     }
     RawImages::TRawImage<AppImplementation::Pixel, ResolutionType>* AppImplementation::CreateRawImage(const Resolution_t& resolution)
     {
-        return new RawImages::TRawImage<Pixel, ResolutionType>(resolution.x, resolution.x); //TODO raw rawImage would not be 1920 1080, is will be pixtl type size * 1920*1080
+        return new RawImages::TRawImage<Pixel, ResolutionType>(resolution.x, resolution.x);
     }
 }

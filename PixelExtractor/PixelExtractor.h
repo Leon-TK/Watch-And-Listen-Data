@@ -246,7 +246,7 @@ namespace WAL
 		template<typename PixelType>
 		inline size_t PixelExtractor<PixelType>::GetChannelLenInBytes()
 		{
-			return (size_t)std::floor(this->pixelSizeInBytes / this->GetPixelChannelsCount());
+			return (size_t)std::floor(this->pixelSizeInBytes / PixelType::GetChannelsCount());
 		}
 
 		template<typename PixelType>
