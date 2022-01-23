@@ -153,6 +153,7 @@ namespace WAL
 			const size_t CalculateFileChunkSize();
 			const size_t CalculatePixelLenghtInBytes(const Resolution_t& directory, const Resolution_t& outputImage);
 			RawImages::TRawImage<Pixel, ResolutionType>* CreateRawImage(const Resolution_t& resolution);
+			const Resolution_t GetRawImageResolution(const Resolution_t& directoryRes);
 
 		public:
 			AppImplementation(const AppSettings& settings);

@@ -105,7 +105,8 @@ namespace WAL::Apps
         InitDirectory();
         InitFileDispencer();
         runContext->fileChunkSize = CalculateFileChunkSize();
-        runContext->pixelLenghtInBytes = CalculatePixelLenghtInBytes(GetDirectoryResolution(), settings.outImageResolution);
+        auto dirRes = GetDirectoryResolution();
+        runContext->pixelLenghtInBytes = CalculatePixelLenghtInBytes(dirRes, GetRawImageResolution(dirRes));
         this->runContext = runContext;
     }
 
@@ -138,8 +139,12 @@ namespace WAL::Apps
         Directory::DirectoryHandler dirHandle(this->dir);
         size_t dirSize = dirHandle.GetAllFilesSize();
         double aspectRatio =  Math::CalcAspectRatioFromLen(1.77, 2.0, dirSize, 0.001);
-        auto dirRes = dirHandle.GetResolution(aspectRatio);
-        return Resolution_t(dirRes.x, dirRes.y);
+        if (aspectRatio < 0) { throw std::exception(); } //TODO throw
+        return dirHandle.GetResolution(aspectRatio);
+    }
+    const Resolution_t AppImplementation::GetRawImageResolution(const Resolution_t& directoryRes)
+    {
+
     }
 
     void AppImplementation::InitFileDispencer()
