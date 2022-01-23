@@ -111,6 +111,10 @@ namespace WAL
 			void InitEncoder();
 			void InitRawImageConverter();
 
+			const size_t CalculateFileChunkSize();
+			const size_t CalculatePixelLenghtInBytes(const Resolution& directory, const Resolution& outputImage);
+			RawImages::TRawImage<Pixel>* CreateRawImage(const Resolution& resolution);
+
 		public:
 
 
