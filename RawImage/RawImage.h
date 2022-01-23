@@ -14,44 +14,48 @@ namespace WAL
 		* @param PixelType which type of Pixel to use. See Pixels.h
 		*
 		*/
-		template <typename PixelType>
+		template <typename PixelType, typename ResolutionType>
 		class TRawImage
 		{
-			struct Data
+			struct RawImageData
 			{
-				~Data() { delete[] data; };
-				Data() = delete;
-				Data(const uint32_t x, const uint32_t y) : x(x), y(y)
+				~RawImageData() { delete[] data; };
+				RawImageData() = delete;
+				RawImageData(const ResolutionType x, const ResolutionType y) : x(x), y(y)
 				{
 					data = new PixelType[(size_t)x * (size_t)y];
 				}
+				const ResolutionType x; //TODO must be unsigned
+				const ResolutionType y; //TODO must be unsigned
 
-				PixelType* data{ nullptr };
-				const uint32_t x;
-				const uint32_t y;
+			private:
+				PixelType* data = nullptr;
 			};
 
 			/*
 			* At which index pixel will be puted by PutNextPixel()
 			*/
-			uint32_t nextPxlX{0};
-			uint32_t nextPxlY{0};
+			ResolutionType nextPxlX = 0;
+			ResolutionType nextPxlY = 0;
 
-			Data* data{nullptr};
+			RawImageData* rawData = nullptr;
 			
 
 		public:
-			~TRawImage() { delete[] data; };
+			typedef PixelType pixelType;
+			typedef ResolutionType resolutionType;
+
+			~TRawImage() { delete[] rawData; };
 			TRawImage() = delete;
-			TRawImage(const uint32_t x, const uint32_t y)
+			TRawImage(const ResolutionType x, const ResolutionType y)
 			{
-				data = new Data(x, y);
+				rawData = new RawImageData(x, y);
 			}
 
 			PixelType* GetData();
 			size_t GetSize();
-			uint32_t GetSizeX();
-			uint32_t GetSizeY();
+			size_t GetSizeX();
+			size_t GetSizeY();
 
 			/*
 			* Put pixel at end of data
@@ -59,13 +63,13 @@ namespace WAL
 			*/
 			void PutNextPixel(PixelType& pxl, bool& outIsNextPuttable);
 			bool canPutNextPixel();
-			void SetPixel(PixelType& pxl, uint32_t x, uint32_t y);
-			PixelType GetPixel(uint32_t x, uint32_t y);
+			void SetPixel(PixelType& pxl, ResolutionType x, ResolutionType y);
+			PixelType GetPixel(ResolutionType x, ResolutionType y);
 			void RestartPutNextPixel();
 		};
 
-		template <typename PixelType>
-		inline void TRawImage<PixelType>::PutNextPixel(PixelType& pxl, bool& outIsNextPuttable)
+		template <typename PixelType, typename ResolutionType>
+		inline void TRawImage<PixelType, ResolutionType>::PutNextPixel(PixelType& pxl, bool& outIsNextPuttable)
 		{
 			if (canPutNextPixel())
 			{
@@ -93,45 +97,45 @@ namespace WAL
 			}
 		}
 
-		template<typename PixelType>
-		inline bool TRawImage<PixelType>::canPutNextPixel()
+		template<typename PixelType, typename ResolutionType>
+		inline bool TRawImage<PixelType, ResolutionType>::canPutNextPixel()
 		{
 			if ((nextPxlX == GetSizeX()) && (nextPxlY == GetSizeY() - 1)) return false;
 			else return true;
 		}
 
-		template <typename PixelType>
-		inline PixelType* TRawImage<PixelType>::GetData()
+		template <typename PixelType, typename ResolutionType>
+		inline PixelType* TRawImage<PixelType, ResolutionType>::GetData()
 		{
-			return data->data;
+			return rawData->data;
 		}
-		template<typename PixelType>
-		inline size_t TRawImage<PixelType>::GetSize()
+		template<typename PixelType, typename ResolutionType>
+		inline size_t TRawImage<PixelType, ResolutionType>::GetSize()
 		{
-			return data->x * data->y;
+			return ((size_t)rawData->x * (size_t)rawData->y);
 		}
-		template<typename PixelType>
-		inline uint32_t TRawImage<PixelType>::GetSizeX()
+		template<typename PixelType, typename ResolutionType>
+		inline size_t TRawImage<PixelType, ResolutionType>::GetSizeX()
 		{
-			return data->x;
+			return (size_t)rawData->x;
 		}
-		template<typename PixelType>
-		inline uint32_t TRawImage<PixelType>::GetSizeY()
+		template<typename PixelType, typename ResolutionType>
+		inline size_t TRawImage<PixelType, ResolutionType>::GetSizeY()
 		{
-			return data->y;
+			return (size_t)rawData->y;
 		}
-		template<typename PixelType>
-		inline void TRawImage<PixelType>::SetPixel(PixelType& pxl, uint32_t x, uint32_t y)
+		template<typename PixelType, typename ResolutionType>
+		inline void TRawImage<PixelType, ResolutionType>::SetPixel(PixelType& pxl, ResolutionType x, ResolutionType y)
 		{
-			data->data[x + y * GetSizeX()] = pxl;
+			rawData->data[(size_t)x + (size_t)y * GetSizeX()] = pxl;
 		}
-		template<typename PixelType>
-		inline PixelType TRawImage<PixelType>::GetPixel(uint32_t x, uint32_t y)
+		template<typename PixelType, typename ResolutionType>
+		inline PixelType TRawImage<PixelType, ResolutionType>::GetPixel(ResolutionType x, ResolutionType y)
 		{
-			return data->data[x + y * GetSizeX()];
+			return rawData->data[(size_t)x + (size_t)y * GetSizeX()];
 		}
-		template<typename PixelType>
-		inline void TRawImage<PixelType>::RestartPutNextPixel()
+		template<typename PixelType, typename ResolutionType>
+		inline void TRawImage<PixelType, ResolutionType>::RestartPutNextPixel()
 		{
 			nextPxlX = 0;
 			nextPxlY = 0;
