@@ -95,8 +95,6 @@ namespace WAL
 		{
 			typedef std::vector<PixelType> PixelVector;
 
-			
-			
 			/*
 			* How much one pixel takes byte lenght
 			*/
@@ -159,13 +157,13 @@ namespace WAL
 			size_t GetChannelLenInBytes();
 
 			PixelType ConvertPixelChunkToPixel(PixelChunk& pixelChunk);
-			SeparateChannels<uint8_t> ConvertPixelChunkToChannels(PixelChunk& pixelChunk); //TODO uint8_t must be user defined ChannelType 
+			SeparateChannels<typename PixelType::channelType> ConvertPixelChunkToChannels(PixelChunk& pixelChunk); //TODO uint8_t must be user defined ChannelType 
 			/*
 			* True if pixel types fit file buffer chunk, i.e. no more no less
 			*/
 			bool canPixelTypesFitBuffer(); //1
 
-			PixelType GetPixelFrom(SeparateChannels<uint8_t>& separateChannels);
+			PixelType GetPixelFrom(SeparateChannels<typename PixelType::channelType>& separateChannels);
 
 		public:
 			PixelExtractor() = delete;
@@ -285,10 +283,10 @@ namespace WAL
 
 		}
 		template<typename PixelType>
-		inline SeparateChannels<uint8_t> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk) //TODO redo this shit
+		inline SeparateChannels<typename PixelType::channelType> PixelExtractor<PixelType>::ConvertPixelChunkToChannels(PixelChunk& pixelChunk) //TODO redo this shit
 		{
 
-			Dividers::ICreateSeparateChannels<uint8_t>* getSeparateChannels = new Dividers::AlternatingDivideForAverage<uint8_t>(pixelChunk.bytes, GetChannelLenInBytes(), 3); 
+			Dividers::ICreateSeparateChannels<typename PixelType::channelType>* getSeparateChannels = new Dividers::AlternatingDivideForAverage<typename PixelType::channelType>(pixelChunk.bytes, GetChannelLenInBytes(), 3);
 			auto resultPtr = getSeparateChannels->Run();
 			auto result = *resultPtr;
 			delete getSeparateChannels;
@@ -330,13 +328,13 @@ namespace WAL
 		}
 
 		template<typename PixelType>
-		inline PixelType PixelExtractor<PixelType>::GetPixelFrom(SeparateChannels<uint8_t>& separateChannels)
+		inline PixelType PixelExtractor<PixelType>::GetPixelFrom(SeparateChannels<typename PixelType::channelType>& separateChannels)
 		{
 
 			//old
-			uint8_t R = ByteAssemble::GetAverageFrom<uint8_t>(separateChannels.RedValues, GetChannelLenInBytes()); //TODO channeltype instead of pixeltype
-			uint8_t G = ByteAssemble::GetAverageFrom<uint8_t>(separateChannels.GreenValues, GetChannelLenInBytes());
-			uint8_t B = ByteAssemble::GetAverageFrom<uint8_t>(separateChannels.BlueValues, GetChannelLenInBytes());
+			typename PixelType::channelType R = ByteAssemble::GetAverageFrom<typename PixelType::channelType>(separateChannels.RedValues, GetChannelLenInBytes()); //TODO channeltype instead of pixeltype
+			typename PixelType::channelType G = ByteAssemble::GetAverageFrom<typename PixelType::channelType>(separateChannels.GreenValues, GetChannelLenInBytes());
+			typename PixelType::channelType B = ByteAssemble::GetAverageFrom<typename PixelType::channelType>(separateChannels.BlueValues, GetChannelLenInBytes());
 			//~old
 
 			PixelType pixel;
