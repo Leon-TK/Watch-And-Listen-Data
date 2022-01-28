@@ -58,6 +58,7 @@ namespace WAL
 				minAspectRatio += precision;
 				if (minAspectRatio > maxAspectRatio) { return -1; }
 				isInt = isSqrtDivideInt(minAspectRatio, len);
+				minAspectRatio += precision;
 			}
 			return minAspectRatio;
 		}
