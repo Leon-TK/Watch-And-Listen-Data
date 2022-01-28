@@ -18,6 +18,9 @@
 
 namespace WAL::Apps
 {
+
+   
+
     AppImplementation::AppImplementation(const AppSettings& settings): settings(settings)
     {
     }
@@ -105,7 +108,7 @@ namespace WAL::Apps
         RunContext* runContext = new RunContext(); //dctor
         InitDirectory();
         InitFileDispencer();
-        runContext->fileChunkSize = CalculateFileChunkSize();
+        runContext->fileChunkSize = CalculateFileChunkSize(); //TODO
         auto dirRes = GetDirectoryResolution();
         runContext->pixelLenghtInBytes = CalculatePixelLenghtInBytes(dirRes, GetRawImageResolution(dirRes));
         this->runContext = runContext;
@@ -142,10 +145,6 @@ namespace WAL::Apps
         double aspectRatio =  Math::CalcAspectRatioFromLen(1.77, 2.0, dirSize, 0.001);
         if (aspectRatio < 0) { throw Exceptions::AspectRatioNotFound(); }
         return dirHandle.GetResolution(aspectRatio);
-    }
-    const Resolution_t AppImplementation::GetRawImageResolution(const Resolution_t& directoryRes)
-    {
-        //
     }
 
     void AppImplementation::InitFileDispencer()
@@ -197,5 +196,9 @@ namespace WAL::Apps
     RawImages::TRawImage<AppImplementation::Pixel, ResolutionType>* AppImplementation::CreateRawImage(const Resolution_t& resolution)
     {
         return new RawImages::TRawImage<Pixel, ResolutionType>(resolution.x, resolution.x);
+    }
+    const Resolution_t AppImplementation::GetRawImageResolution(const Resolution_t& directoryRes)
+    {
+        return Resolution_t();
     }
 }
