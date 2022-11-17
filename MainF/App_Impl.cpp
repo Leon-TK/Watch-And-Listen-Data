@@ -2,7 +2,7 @@
 #include "App_Impl.h"
 #include "../Directory/IDirectory.h"
 #include "../Directory/Directory_Impl.h"
-#include "../Directory/DirectoryHandler.h"
+#include "../Directory/DirectoryManager.h"
 #include "../Encoders/IVideoEncoder.h"
 #include "../Encoders/h256_Impl.h"
 #include "../PixelExtractor/PixelExtractor.h"
@@ -66,7 +66,7 @@ namespace WAL::Apps
                     this->encoder->AddAsFrame(rawImageConverter->Convert(*this->initContext->rawImage));
                 }
             }
-            //TODO last unfilled chunk remain unhandled.
+            //TODO last unfilled chunk remain unprocessed.
             delete this->chunkDispencer;
         }
 
@@ -140,11 +140,11 @@ namespace WAL::Apps
 
     Resolution_t AppImplementation::GetDirectoryResolution()
     {
-        Directory::DirectoryHandler dirHandle(this->dir);
-        size_t dirSize = dirHandle.GetAllFilesSize();
+        Directory::DirectoryManager dirManager(this->dir);
+        size_t dirSize = dirManager.GetAllFilesSize();
         double aspectRatio =  Math::CalcAspectRatioFromLen(1.77, 2.0, dirSize, 0.001);
         if (aspectRatio < 0) { throw Exceptions::AspectRatioNotFound(); }
-        return dirHandle.GetResolution(aspectRatio);
+        return dirManager.GetResolution(aspectRatio);
     }
 
     void AppImplementation::InitFileDispencer()

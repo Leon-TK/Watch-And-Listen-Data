@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "File_Impl.h"
 #include <string>
-#include "../BufferHandler.h"
+#include "../BufferManager.h"
 
 //#include <filesystem>
 namespace WAL::File
@@ -23,8 +23,8 @@ namespace WAL::File
 
     size_t File_Impl::GetFileSize()
     {
-        BufferHandlers::FileBufferHandler handler(&this->file);
-        return handler.GetFileSize();
+        BufferManagers::FileBufferManager manager(&this->file);
+        return manager.GetFileSize();
     }
 
     std::ifstream& File_Impl::GetBuffer()

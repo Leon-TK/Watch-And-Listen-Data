@@ -103,7 +103,7 @@ namespace WAL
 			/*
 			* How many bytes were sended by GetNextPixel(). Commonly for checking next pixel exist
 			*/
-			size_t handledPixelBytes{ 0 };
+			size_t processeddPixelBytes{ 0 };
 
 			/**
 			* It will be converted to pixel vector
@@ -133,7 +133,7 @@ namespace WAL
 			*/
 			bool canRowsFitToBuffer(size_t rowLen, size_t bufLen);
 
-			//TODO must return filled rows, for that you need to do right calculation with chunk size in getNextChunk filehandler
+			//TODO must return filled rows, for that you need to do right calculation with chunk size in getNextChunk filemanager
 			/**
 			* Returns nested rows in one 2D array. 
 			* @param step
@@ -220,7 +220,7 @@ namespace WAL
 				{
 					vec.at(i) = fileBufferChunk->at(i); //TODO get bext ...
 				}
-				this->handledPixelBytes += this->pixelSizeInBytes;
+				this->processeddPixelBytes += this->pixelSizeInBytes;
 				outIsNextChunkExist = isNextPixelChunkExist();
 				return PixelChunk(vec);
 			}
@@ -233,7 +233,7 @@ namespace WAL
 		template<typename PixelType>
 		inline bool PixelExtractor<PixelType>::isNextPixelChunkExist()
 		{
-			if (this->handledPixelBytes + this->pixelSizeInBytes > this->fileBufferChunk->size()) return false; else return true;
+			if (this->processeddPixelBytes + this->pixelSizeInBytes > this->fileBufferChunk->size()) return false; else return true;
 		}
 
 		template<typename PixelType>
@@ -318,7 +318,7 @@ namespace WAL
 				auto channelLen = GetChannelLenInBytes();
 				auto pixel = ConvertPixelChunkToPixel(pixelChunk);
 	
-				this->handledPixelBytes += this->pixelSizeInBytes;
+				this->processeddPixelBytes += this->pixelSizeInBytes;
 
 				return pixel;
 			}

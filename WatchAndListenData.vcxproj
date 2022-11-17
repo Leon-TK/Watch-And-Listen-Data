@@ -115,33 +115,33 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BufferHandler.cpp" />
+    <ClCompile Include="BufferManager.cpp" />
     <ClCompile Include="FileChunkDispencer.cpp" />
-    <ClCompile Include="directory\DirectoryHandler.cpp" />
+    <ClCompile Include="directory\DirectoryManager.cpp" />
     <ClCompile Include="directory\Directory_Impl.cpp" />
     <ClCompile Include="encoders\h256Encoder.cpp" />
     <ClCompile Include="ExtractionContext.cpp" />
     <ClCompile Include="FileDispencer.cpp" />
-    <ClCompile Include="file\FileHandler.cpp" />
+    <ClCompile Include="file\FileManager.cpp" />
     <ClCompile Include="file\File_Impl.cpp" />
     <ClCompile Include="Images.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainf\App_Impl.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BufferHandler.h" />
+    <ClInclude Include="BufferManager.h" />
     <ClInclude Include="ByteAssemble.h" />
     <ClInclude Include="Exceptions.h" />
     <ClInclude Include="FileChunkDispencer.h" />
     <ClInclude Include="directory\IDirectory.h" />
-    <ClInclude Include="directory\DirectoryHandler.h" />
+    <ClInclude Include="directory\DirectoryManager.h" />
     <ClInclude Include="directory\Directory_Impl.h" />
     <ClInclude Include="Encoders\h256_Impl.h" />
     <ClInclude Include="encoders\IVideoEncoder.h" />
     <ClInclude Include="ExtractionContext.h" />
     <ClInclude Include="FileDispencer.h" />
     <ClInclude Include="file\IFile.h" />
-    <ClInclude Include="file\FileHandler.h" />
+    <ClInclude Include="file\FileManager.h" />
     <ClInclude Include="file\File_Impl.h" />
     <ClInclude Include="Images.h" />
     <ClInclude Include="images\IImage.h" />

@@ -26,7 +26,7 @@ namespace WAL
 		}
 
 		/*
-		* DEPRECATED. Use filebufferhandler
+		* DEPRECATED. Use filebuffermanager
 		* Stream must be in binary mode. Uses standart iostream get()
 		* @param Size How much bytes to extract
 		*/

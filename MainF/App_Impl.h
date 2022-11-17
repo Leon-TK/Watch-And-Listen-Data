@@ -136,7 +136,7 @@ namespace WAL
 			void ConvertImage();
 
 			/**
-			* Encoder handles image with added pixel as one frame of video
+			* Encoder processes image with added pixel as one frame of video
 			*/
 			void AddImageToEncoder();
 

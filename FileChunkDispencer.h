@@ -4,9 +4,9 @@
 
 namespace WAL
 {
-	namespace BufferHandlers
+	namespace BufferManagers
 	{
-		class FileBufferHandler;
+		class FileBufferManager;
 	}
 
 	namespace File
@@ -19,13 +19,13 @@ namespace WAL
 		{
 		private:
 			/*
-			* File stream that will be handled
+			* File stream that will be processed
 			*/
 			std::ifstream& strm;
 
 			const size_t chunkSize{ 0 };
-			size_t handledBytes{ 0 };
-			BufferHandlers::FileBufferHandler* fileBufferHandler;
+			size_t processeddBytes{ 0 };
+			BufferManagers::FileBufferManager* fileBufferManager;
 		public:
 			FileChunkDispencer() = delete;
 			FileChunkDispencer(std::ifstream& strm, const size_t chunkSize);

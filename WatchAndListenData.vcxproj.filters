@@ -30,7 +30,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="directory\DirectoryHandler.cpp">
+    <ClCompile Include="directory\DirectoryManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="directory\Directory_Impl.cpp">
@@ -39,7 +39,7 @@
     <ClCompile Include="encoders\h256Encoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="file\FileHandler.cpp">
+    <ClCompile Include="file\FileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="file\File_Impl.cpp">
@@ -57,7 +57,7 @@
     <ClCompile Include="ExtractionContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BufferHandler.cpp">
+    <ClCompile Include="BufferManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Images.cpp">
@@ -65,10 +65,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="directory\DirectoryHandler.h">
+    <ClInclude Include="directory\DirectoryManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="file\FileHandler.h">
+    <ClInclude Include="file\FileManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pixelextractor\PixelExtractor.h">
@@ -122,7 +122,7 @@
     <ClInclude Include="rawimage\RawImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BufferHandler.h">
+    <ClInclude Include="BufferManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Images.h">
